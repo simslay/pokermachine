@@ -7,15 +7,18 @@ Created on Sun Dec 06 2020
 
 
 import threading
-from tkinter import *
+# from tkinter import *
 from game.game import Game
-from game.scorer import Scorer
+# from game.scorer import Scorer
+from game.player.player import Player
 
 
 def main():
     def play(game):
-        game.table.deck.shuffle()
-        print(game.table.deck)
+        deck = game.state.table.deck
+        deck.shuffle()
+        print("deck shuffled")
+        print(deck)
         input("Press enter to continue...")
 
     # class App(Tk):
@@ -29,6 +32,15 @@ def main():
 
     def run_game_data():
         game0 = Game()
+        players = []
+
+        for i in range(5):
+            name = input("Please enter your name or press enter to end registering players:")
+
+            if name == "":
+                break
+
+            players.append(Player(name, 100, 1000))
 
         while True:
             play(game0)

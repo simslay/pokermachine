@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Dec 07 17:20:00 2020
-
-@author: simslay
-"""
-
 import random
 from game.card import Card
 
@@ -21,7 +14,6 @@ class Deck(list):
 
     def shuffle(self):
         random.shuffle(self)
-        print("\n\n--deck shuffled--")
 
     def deal(self, location, times=1):
         for i in range(times):
