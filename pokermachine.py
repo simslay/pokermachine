@@ -53,6 +53,20 @@ def main():
             else:
                 return "[CARD]"
 
+    class Player(object):
+        def __init__(self, name, chips, stake):
+            self.name = name
+            self.chips = chips
+            self.stake = stake
+            self.cards = []
+
+        def __repr__(self):
+            return self.name
+
+    class Table:
+        def __init__(self, seats):
+            self.seats = seats
+
     class StandardDeck(list):
         def __init__(self):
             super().__init__()
@@ -76,46 +90,13 @@ def main():
 
     class Game(object):
         def __init__(self):
-            self.need_raise_info = False
             self.deck = StandardDeck()
+            self.game_over = False
+            self.table = Table(5)
 
     def play(game):
         game.deck.shuffle()
-        game_info_q.put(game)
-        # update_gui(game)
-        game.establish_player_attributes()
-        game.deal_hole()
-        game.print_round_info()
-        game.act_one()
-        game.print_round_info()
-        if not game.round_ended:
-            game.deal_flop()
-            game.print_round_info()
-        if not game.round_ended:
-            game.ask_players()
-            game.print_round_info()
-        if not game.round_ended:
-            game.deal_turn()
-            game.print_round_info()
-        if not game.round_ended:
-            game.ask_players()
-            game.print_round_info()
-        if not game.round_ended:
-            game.deal_river()
-            game.print_round_info()
-        if not game.round_ended:
-            game.ask_players()
-            game.print_round_info()
-        if not game.round_ended:
-            game.score_all()
-            game.print_round_info()
-        game.find_winners()
-        game_info_q.put(game)
-
-        game.print_round_info()
-        game.round_ended = True
-        print(game.winners, game.winner, [player for player in game.list_of_players_not_out if player.win])
-        game.end_round()
+        input("Press enter to continue...")
 
     class App(Tk):
         def __init__(self, *args, **kwargs):
@@ -128,6 +109,7 @@ def main():
 
     def run_game_data():
         game0 = Game()
+
         while True:
             play(game0)
 
