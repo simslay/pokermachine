@@ -1,11 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Dec 07 18:25:00 2020
-
-@author: simslay
-"""
-
-
 class Scorer(object):
     def __init__(self, cards):
         self.cards = cards
@@ -27,10 +19,14 @@ class Scorer(object):
             return 5
 
         else:
-            if not values[0] + 1 == values[1]: return False
-            if not values[1] + 1 == values[2]: return False
-            if not values[2] + 1 == values[3]: return False
-            if not values[3] + 1 == values[4]: return False
+            if not values[0] + 1 == values[1]:
+                return False
+            if not values[1] + 1 == values[2]:
+                return False
+            if not values[2] + 1 == values[3]:
+                return False
+            if not values[3] + 1 == values[4]:
+                return False
 
         return values[4]
 

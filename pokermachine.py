@@ -9,6 +9,7 @@ Created on Sun Dec 06 2020
 import threading
 from tkinter import *
 from game.game import Game
+from game.scorer import Scorer
 
 
 def main():
@@ -17,10 +18,10 @@ def main():
         print(game.table.deck)
         input("Press enter to continue...")
 
-    class App(Tk):
-        def __init__(self, *args, **kwargs):
-            Tk.__init__(self, *args, **kwargs)
-            self.game_object = object
+    # class App(Tk):
+    #     def __init__(self, *args, **kwargs):
+    #         Tk.__init__(self, *args, **kwargs)
+    #         self.game_object = object
 
     # def run_app():
     #     app = App()
