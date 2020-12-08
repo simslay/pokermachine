@@ -54,18 +54,14 @@ def main():
             container.grid_rowconfigure(0, weight=1)
             container.grid_columnconfigure(0, weight=1)
 
-            self.frames = {}
-            frames = [StartPage]
-
-            frame = frames[0](container, self)
-            self.frames[frames[0]] = frame
-            frame.grid(row=0, column=0, sticky="nsew")
+            self.frame = StartPage(container, self)
+            self.frame.grid(row=0, column=0, sticky="nsew")
 
             self.fresh = True
-            self.show_frame(StartPage)
+            self.show_frame()
 
-        def show_frame(self, context):
-            frame = self.frames[context]
+        def show_frame(self):
+            frame = self.frame
             print("waiting")
             if not self.fresh:
                 time.sleep(0.1)
