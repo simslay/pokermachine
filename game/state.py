@@ -15,6 +15,8 @@ class State:
         self.current_player = players[0]
         self.turn_number = 1
         self.player_count = len(set(players))
+        self.players_not_out = players
+        self.round_ended = False
 
     def deal_flop(self):
         deck = self.table.deck
@@ -45,4 +47,14 @@ class State:
             # print(f"Stake-gap: {player.stake_gap}")
             print()
         print(f"Pot: {self.table.pot}")
-        print(f"Community cards: {self.table.community_cards}")
+        print(f"Community cards: {self.table.cards}")
+
+    def ask_players(self):
+        pass
+
+    def deal_hole(self):
+        for player in self.players_not_out:
+            self.table.deck.deal(player, 2)
+
+    def end_round(self):
+        pass

@@ -12,4 +12,3 @@ class Game(object):
     def __init__(self, players):
         self.game_over = False
         self.state = State(players)
-        self.round_ended = False
