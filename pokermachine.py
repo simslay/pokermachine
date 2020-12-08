@@ -19,6 +19,67 @@ def main():
     class StartPage(Frame):
         def __init__(self, parent, controller):
             Frame.__init__(self, parent)
+
+            height = 500
+            width = 800
+            canvas = Canvas(self, height=height, width=width, bg="light green")
+            canvas.pack()
+
+            left_frame = Frame(canvas, bg='green', bd=5)
+            left_frame.place(relx=0, rely=0, relwidth=0.5, relheight=1, anchor='nw')
+            name_frame = Frame(left_frame, bg="light green", bd=5)
+            name_frame.place(relx=0.5, rely=0.17, relwidth=0.9, relheight=0.7, anchor="n")
+            self.entry_p0 = Entry(name_frame, font=("Courier", 12), bd=3)
+            self.entry_p0.place(relwidth=0.5, relheight=0.2)
+            self.entry_p1 = Entry(name_frame, font=("Courier", 12), bd=3)
+            self.entry_p1.place(relx=0.5, rely=0, relwidth=0.5, relheight=0.2)
+            self.entry_p2 = Entry(name_frame, font=("Courier", 12), bd=3)
+            self.entry_p2.place(relx=0, rely=0.2, relwidth=0.5, relheight=0.2)
+            self.entry_p3 = Entry(name_frame, font=("Courier", 12), bd=3)
+            self.entry_p3.place(relx=0.5, rely=0.2, relwidth=0.5, relheight=0.2)
+            self.entry_p4 = Entry(name_frame, font=("Courier", 12), bd=3)
+            self.entry_p4.place(relx=0, rely=0.4, relwidth=0.5, relheight=0.2)
+            enter_player_label = Label(left_frame, text="Player Names:", font=("Courier", 12), bd=3)
+            enter_player_label.place(relx=0.25, rely=0.07, relwidth=0.5, relheight=0.05)
+            # self.entry.bind("<Return>", lambda _: self.button_click(self.entry.get()))
+
+            right_frame = Frame(canvas, bg='green', bd=5)
+            right_frame.place(relx=1, rely=0, relwidth=0.5, relheight=1, anchor='ne')
+
+            button = Button(right_frame, text="START", font=("Courier", 12),
+                            command=lambda: self.button_click(self.entry_p0.get(), self.entry_p1.get(),
+                                                              self.entry_p2.get(), self.entry_p3.get(),
+                                                              self.entry_p4.get(), controller))
+            button.place(relx=0.5, rely=0.9, relwidth=0.3, relheight=0.1, anchor="n")
+
+        @staticmethod
+        def button_click(entry0, entry1, entry2, entry3, entry4, controller):
+            entry_list = [entry0, entry1, entry2, entry3, entry4]
+            player_entry_list = [entry0, entry1, entry2, entry3, entry4]
+            print(player_entry_list)
+            player_entry_list = list(set(player_entry_list))
+            for player in player_entry_list:
+                if player == "":
+                    player_entry_list.remove(player)
+            print(player_entry_list)
+            if len(player_entry_list) < 2:
+                print("not enough players")
+                return
+            chip_entry_list = [100, 1, 2]
+
+            setup = {
+                "players": player_entry_list,
+                "chips": chip_entry_list
+            }
+            response_q.put(setup)
+            game_event.set()
+            # controller.show_frame(GamePage)
+
+    class GamePage(Frame):
+        def __init__(self, parent, controller):
+            Frame.__init__(self, parent)
+
+        def update_frame(self, game):
             pass
 
     def play(game):
@@ -54,18 +115,24 @@ def main():
             container.grid_rowconfigure(0, weight=1)
             container.grid_columnconfigure(0, weight=1)
 
-            self.frame = StartPage(container, self)
-            self.frame.grid(row=0, column=0, sticky="nsew")
+            self.frames = {}
+
+            list_of_frames = [StartPage, GamePage]
+
+            for F in list_of_frames:
+                frame = F(container, self)
+                self.frames[F] = frame
+                frame.grid(row=0, column=0, sticky="nsew")
 
             self.fresh = True
-            self.show_frame()
+            self.show_frame(StartPage)
 
-        def show_frame(self):
-            frame = self.frame
+        def show_frame(self, context):
+            frame = self.frames[context]
             print("waiting")
             if not self.fresh:
                 time.sleep(0.1)
-                frame.update(game_info_q.get())
+                frame.update_frame(game_info_q.get())
             self.fresh = False
             frame.tkraise()
 
