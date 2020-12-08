@@ -15,8 +15,17 @@ from game.player.player import Player
 
 def main():
     def play(game):
-        print("It's " + game.current_player.name + "'s turn")
-        game.change_player()
+        state = game.state
+
+        if not game.round_ended:
+            state.deal_flop()
+            state.print_round_info()
+
+        print()
+
+        print("It's " + state.current_player.name + "'s turn")
+
+        state.change_player()
         input("Press enter to continue...")
 
     # class App(Tk):
@@ -40,12 +49,14 @@ def main():
             players.append(Player(name, 100, 1000))
 
         game0 = Game(players)
-        game0.display_players()
+        state0 = game0.state
+        state0.display_players()
 
         deck = game0.state.table.deck
         deck.shuffle()
         print("deck shuffled")
         print(deck)
+        print()
 
         while True:
             play(game0)

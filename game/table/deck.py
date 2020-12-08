@@ -17,7 +17,7 @@ class Deck(list):
 
     def deal(self, location, times=1):
         for i in range(times):
-            location.cards.append(self.pop(0))
+            location.community_cards.append(self.pop(0))
 
     def burn(self):
         self.pop(0)

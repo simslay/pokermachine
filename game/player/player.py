@@ -12,6 +12,8 @@ class Player(object):
         self.chips = chips
         self.stake = stake
         self.cards = []
+        self.fold = False
+        self.all_in = False
 
     def __repr__(self):
         return self.name

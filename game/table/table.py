@@ -12,3 +12,5 @@ class Table:
     def __init__(self, seats):
         self.seats = seats
         self.deck = Deck()
+        self.community_cards = []
+        self.pot = 0
