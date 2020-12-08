@@ -15,10 +15,8 @@ from game.player.player import Player
 
 def main():
     def play(game):
-        deck = game.state.table.deck
-        deck.shuffle()
-        print("deck shuffled")
-        print(deck)
+        print("It's " + game.current_player.name + "'s turn")
+        game.change_player()
         input("Press enter to continue...")
 
     # class App(Tk):
@@ -31,7 +29,6 @@ def main():
     #     app.mainloop()
 
     def run_game_data():
-        game0 = Game()
         players = []
 
         for i in range(5):
@@ -41,6 +38,14 @@ def main():
                 break
 
             players.append(Player(name, 100, 1000))
+
+        game0 = Game(players)
+        game0.display_players()
+
+        deck = game0.state.table.deck
+        deck.shuffle()
+        print("deck shuffled")
+        print(deck)
 
         while True:
             play(game0)
