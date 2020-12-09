@@ -25,38 +25,41 @@ def main():
             canvas = Canvas(self, height=height, width=width, bg="light green")
             canvas.pack()
 
-            left_frame = Frame(canvas, bg='green', bd=5)
-            left_frame.place(relx=0, rely=0, relwidth=0.5, relheight=1, anchor='nw')
-            name_frame = Frame(left_frame, bg="light green", bd=5)
-            name_frame.place(relx=0.5, rely=0.17, relwidth=0.9, relheight=0.7, anchor="n")
+            top_frame = Frame(canvas, bg='green', bd=5)
+            top_frame.place(relx=0, rely=0, relwidth=1, relheight=0.2, anchor='nw')
+            name_frame = Frame(top_frame, bg="light green", bd=5)
+            name_frame.place(relx=0.5, rely=0.27, relwidth=0.9, relheight=0.5, anchor="n")
             self.entry_p0 = Entry(name_frame, font=("Courier", 12), bd=3)
-            self.entry_p0.place(relwidth=0.5, relheight=0.2)
+            self.entry_p0.place(relwidth=0.2, relheight=1)
             self.entry_p1 = Entry(name_frame, font=("Courier", 12), bd=3)
-            self.entry_p1.place(relx=0.5, rely=0, relwidth=0.5, relheight=0.2)
+            self.entry_p1.place(relx=0.2, rely=0, relwidth=0.2, relheight=1)
             self.entry_p2 = Entry(name_frame, font=("Courier", 12), bd=3)
-            self.entry_p2.place(relx=0, rely=0.2, relwidth=0.5, relheight=0.2)
+            self.entry_p2.place(relx=0.4, rely=0, relwidth=0.2, relheight=1)
             self.entry_p3 = Entry(name_frame, font=("Courier", 12), bd=3)
-            self.entry_p3.place(relx=0.5, rely=0.2, relwidth=0.5, relheight=0.2)
+            self.entry_p3.place(relx=0.6, rely=0, relwidth=0.2, relheight=1)
             self.entry_p4 = Entry(name_frame, font=("Courier", 12), bd=3)
-            self.entry_p4.place(relx=0, rely=0.4, relwidth=0.5, relheight=0.2)
-            enter_player_label = Label(left_frame, text="Player Names:", font=("Courier", 12), bd=3)
-            enter_player_label.place(relx=0.25, rely=0.07, relwidth=0.5, relheight=0.05)
+            self.entry_p4.place(relx=0.8, rely=0, relwidth=0.2, relheight=1)
+            enter_player_label = Label(top_frame, text="Player Names:", font=("Courier", 12), bd=3)
+            enter_player_label.place(relx=0.25, rely=0.07, relwidth=0.5, relheight=0.15)
             # self.entry.bind("<Return>", lambda _: self.button_click(self.entry.get()))
 
-            right_frame = Frame(canvas, bg='green', bd=5)
-            right_frame.place(relx=1, rely=0, relwidth=0.5, relheight=1, anchor='ne')
+            bottom_frame = Frame(canvas, bg='green', bd=5)
+            bottom_frame.place(relx=0.5, rely=1, relwidth=1, relheight=0.8, anchor='s')
 
-            button = Button(right_frame, text="START", font=("Courier", 12),
+            button = Button(bottom_frame, text="START", font=("Courier", 12),
                             command=lambda: self.button_click(self.entry_p0.get(), self.entry_p1.get(),
                                                               self.entry_p2.get(), self.entry_p3.get(),
                                                               self.entry_p4.get(), controller))
-            button.place(relx=0.5, rely=0.9, relwidth=0.3, relheight=0.1, anchor="n")
+            button.place(relx=0.5, rely=0.5, relwidth=0.2, relheight=0.2, anchor="n")
 
         @staticmethod
         def button_click(entry0, entry1, entry2, entry3, entry4, controller):
             entry_list = [entry0, entry1, entry2, entry3, entry4]
             player_entry_list = [entry0, entry1, entry2, entry3, entry4]
+
+            print(player_entry_list)
             player_entry_list = list(set(player_entry_list))
+            print(player_entry_list)
             for player in player_entry_list:
                 if player == "":
                     player_entry_list.remove(player)
