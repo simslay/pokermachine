@@ -9,14 +9,14 @@ from game.table.table import Table
 
 
 class State:
-    def __init__(self, players):
+    def __init__(self):
         self.table = Table(5)
-        self.players = players
-        self.current_player = players[0]
+        self.players = []
+        self.current_player = None
         self.turn_number = 1
-        self.player_count = len(set(players))
-        self.players_not_out = players
+        self.players_not_out = []
         self.round_ended = False
+        self.setup = {}
 
     def deal_flop(self):
         deck = self.table.deck
@@ -26,7 +26,7 @@ class State:
 
     def display_players(self):
         for player in self.players:
-            print(player.name)
+            print(player)
 
     def change_player(self):
         self.current_player = self.players[self.turn_number % self.player_count]

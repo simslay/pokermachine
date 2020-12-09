@@ -9,6 +9,6 @@ from game.state import State
 
 
 class Game(object):
-    def __init__(self, players):
+    def __init__(self):
         self.game_over = False
-        self.state = State(players)
+        self.state = State()

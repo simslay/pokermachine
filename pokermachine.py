@@ -56,16 +56,14 @@ def main():
         def button_click(entry0, entry1, entry2, entry3, entry4, controller):
             entry_list = [entry0, entry1, entry2, entry3, entry4]
             player_entry_list = [entry0, entry1, entry2, entry3, entry4]
-            print(player_entry_list)
             player_entry_list = list(set(player_entry_list))
             for player in player_entry_list:
                 if player == "":
                     player_entry_list.remove(player)
-            print(player_entry_list)
             if len(player_entry_list) < 2:
                 print("not enough players")
                 return
-            chip_entry_list = [100, 1, 2]
+            chip_entry_list = [100, 1000, 1, 2]
 
             setup = {
                 "players": player_entry_list,
@@ -87,15 +85,18 @@ def main():
         game_info_q.put(game)
         state.deal_hole()
         state.print_round_info()
+        print()
 
         if not state.round_ended:
             state.deal_flop()
             state.print_round_info()
+            print()
         if not state.round_ended:
             state.ask_players()
 
         game_info_q.put(game)
         state.print_round_info()
+        print()
         state.round_ended = True
         state.end_round()
 
@@ -140,20 +141,31 @@ def main():
         app = App()
         app.mainloop()
 
+    def ask_app(question, game=""):
+        print("asking...")
+        print(question)
+        answer = ""
+        if game != "":
+            game_info_q.put(game)
+
+        game_event.wait()
+        if not response_q.empty():
+            answer = response_q.get()
+        game_event.clear()
+
+        return answer
+
     def run_game_data():
-        players = []
-
-        for i in range(5):
-            name = input("Please enter your name or press enter to end registering players:")
-
-            if name == "":
-                break
-
-            players.append(Player(name, 100, 1000))
-
-        game0 = Game(players)
+        game0 = Game()
         state0 = game0.state
-        state0.display_players()
+        state0.setup = ask_app("Start?")
+        players_name = state0.setup["players"]
+        chips = state0.setup["chips"]
+        state0.players = [Player(name, chips[0], chips[1]) for name in players_name if name != ""]
+        # state0.display_players()
+
+        state0.current_player = state0.players[0]
+        state0.player_count = len(set(state0.players))
 
         deck = game0.state.table.deck
         deck.shuffle()
