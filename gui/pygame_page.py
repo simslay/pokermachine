@@ -4,16 +4,16 @@ import pygame
 
 class PygamePage:
     def __init__(self):
-        window_width = 1000
-        window_height = 569
+        window_width = 800
+        window_height = 600
 
         os.environ['SDL_VIDEO_CENTERED'] = '1'
         pygame.init()
 
         pygame.display.set_caption("Pokermachine")
-        table_img = pygame.image.load('images/800px-Poker_Table.svg.png')
+        table_img = pygame.image.load('images/600px-Poker_Table.svg.png')
         table_rect = table_img.get_rect()
-        table_rect.center = (window_width//2, window_height//2)
+        table_rect.center = (window_width//2, 250)
         # clock = pygame.time.Clock()
 
         screen = pygame.display.set_mode((window_width, window_height))
