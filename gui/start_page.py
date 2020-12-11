@@ -5,6 +5,7 @@ Created on Mon Thu 07 17:58:00 2020
 @author: simslay
 """
 
+import tkinter as tk
 from tkinter import *
 from gui.pygame_page import PygamePage
 
@@ -71,4 +72,5 @@ class StartPage(Frame):
 
         self.response_q.put(setup)
         self.game_event.set()
+        controller.destroy()
         PygamePage()
