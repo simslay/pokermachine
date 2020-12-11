@@ -6,7 +6,7 @@ Created on Mon Thu 07 17:58:00 2020
 """
 
 from tkinter import *
-from gui.game_page import GamePage
+from gui.pygame_page import PygamePage
 
 
 class StartPage(Frame):
@@ -71,4 +71,4 @@ class StartPage(Frame):
 
         self.response_q.put(setup)
         self.game_event.set()
-        controller.show_frame(GamePage)
+        PygamePage()
