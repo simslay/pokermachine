@@ -20,6 +20,10 @@ class PygamePage:
 
         south_cards = pygame.image.load('images/600px-2Cards_South.svg.png')
         north_cards = pygame.image.load('images/600px-2Cards_North.svg.png')
+        south_east_cards = pygame.image.load('images/600px-2Cards_South-East.svg.png')
+        south_west_cards = pygame.image.load('images/600px-2Cards_South-West.svg.png')
+        north_east_cards = pygame.image.load('images/600px-2Cards_North-East.svg.png')
+        north_west_cards = pygame.image.load('images/600px-2Cards_North-West.svg.png')
 
         end = False
 
@@ -28,6 +32,10 @@ class PygamePage:
             screen.blit(table_img, table_rect)
             screen.blit(south_cards, (window_width//2-53//2, window_height//2+32))
             screen.blit(north_cards, (window_width//2-53//2, 117))
+            screen.blit(south_east_cards, (window_width-217, window_height//2-6))
+            screen.blit(south_west_cards, (163, window_height//2-6))
+            screen.blit(north_east_cards, (window_width-217, 144))
+            screen.blit(north_west_cards, (166, 144))
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     end = True
