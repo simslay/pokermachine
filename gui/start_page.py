@@ -11,11 +11,12 @@ from gui.pygame_page import PygamePage
 
 
 class StartPage(Frame):
-    def __init__(self, parent, controller, response_q, game_event):
+    def __init__(self, parent, controller, response_q, game_info_q, game_event):
         Frame.__init__(self, parent)
 
         self.response_q = response_q
         self.game_event = game_event
+        self.game_info_q = game_info_q
 
         height = 500
         width = 800
@@ -73,4 +74,4 @@ class StartPage(Frame):
         self.response_q.put(setup)
         self.game_event.set()
         controller.destroy()
-        PygamePage()
+        PygamePage(self.game_info_q)

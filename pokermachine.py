@@ -20,8 +20,8 @@ from gui.game_page import GamePage
 def main():
     def play(game):
         state = game.state
-        game_info_q.put(game)
         state.deal_hole()
+        game_info_q.put(game)
         state.print_round_info()
         print()
 
@@ -60,7 +60,7 @@ def main():
             list_of_frames = [StartPage, GamePage]
 
             for F in list_of_frames:
-                frame = F(container, self, response_q, game_event)
+                frame = F(container, self, response_q, game_info_q, game_event)
                 self.frames[F] = frame
                 frame.grid(row=0, column=0, sticky="nsew")
 
@@ -95,22 +95,19 @@ def main():
         return answer
 
     def run_game_data():
-        game0 = Game()
+        game0 = Game(100)
         state0 = game0.state
         state0.setup = ask_app("Start?")
         players_name = state0.setup["players"]
         chips = state0.setup["chips"]
         state0.players = [Player(name, chips[0], chips[1]) for name in players_name if name != ""]
-        # state0.display_players()
+        state0.players_not_out = state0.players
 
         state0.current_player = state0.players[0]
         state0.player_count = len(set(state0.players))
 
         deck = game0.state.table.deck
         deck.shuffle()
-        print("deck shuffled")
-        print(deck)
-        print()
 
         while True:
             play(game0)

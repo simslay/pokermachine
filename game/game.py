@@ -9,6 +9,7 @@ from game.state import State
 
 
 class Game(object):
-    def __init__(self):
+    def __init__(self, starting_chips):
         self.game_over = False
         self.state = State()
+        self.starting_chips = starting_chips
