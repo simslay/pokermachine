@@ -124,6 +124,15 @@ class PygamePage:
             screen.fill((220, 220, 220))
             screen.blit(table_img, table_rect)
 
+            red = (255, 0, 0)
+            size = (50, 50)
+
+            rect_border = pygame.Surface(size)
+            pygame.draw.rect(rect_border, red, rect_border.get_rect(), 10)
+
+            rect_filled = pygame.Surface(size)
+            pygame.draw.rect(rect_filled, red, rect_filled.get_rect())
+
             screen.blit(south_table_cards, (window_width//2-53//2, window_height//2+32))
             screen.blit(south_card1, (window_width//2-53//2, window_height//2+32+70))
             screen.blit(south_card2, (window_width//2, window_height//2+32+70))
