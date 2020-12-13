@@ -20,12 +20,10 @@ from gui.game_page import GamePage
 def main():
     def play(game):
         state = game.state
+        game.init_first_player()
         state.deal_hole()
-        game_info_q.put(game)
-        # state.print_round_info()
-        # print()
-
         game.act_one()
+        game_info_q.put(game)
 
         # state.display_players()
 
@@ -100,17 +98,18 @@ def main():
         return answer
 
     def run_game_data():
-        game0 = Game(100)
+        setup = ask_app("Start?")
+        chips = setup["chips"]
+        players_name = setup["players"]
+        game0 = Game(chips[0], chips[1], chips[2], chips[3])
         game0.init_game()
         state0 = game0.state
-        state0.setup = ask_app("Start?")
-        players_name = state0.setup["players"]
-        chips = state0.setup["chips"]
+        state0.setup = setup
         state0.players = [Player(name, chips[0], chips[1]) for name in players_name if name != ""]
         state0.players_not_out = state0.players
 
         state0.current_player = state0.players[0]
-        state0.player_count = len(set(state0.players))
+        state0.player_count = len(state0.players)
 
         deck = game0.state.table.deck
         deck.shuffle()

@@ -15,6 +15,10 @@ class State:
         self.table = Table(5)
         self.players = []
         self.current_player = None
+        self.first_player = None
+        self.first_player_index = None
+        self.small_blind_player = None
+        self.big_blind_player = None
         self.turn_number = 1
         self.players_not_out = []
         self.round_ended = False
