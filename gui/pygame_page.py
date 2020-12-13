@@ -203,9 +203,12 @@ class PygamePage:
                 screen.blit(south_table_east_cards, (window_width-217, window_height//2-6))
 
             for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                    end = True
-            # pygame.display.flip() # mostly equivalent to pygame.display.update()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        end = True
+                    if event.key == pygame.K_RETURN:
+                        self.game.state.deal_flop()
+            # pygame.display.flip()  # mostly equivalent to pygame.display.update()
             pygame.display.update()
         pygame.quit()
 

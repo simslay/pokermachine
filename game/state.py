@@ -9,6 +9,8 @@ from game.table.table import Table
 
 
 class State:
+    player_count = 0
+
     def __init__(self):
         self.table = Table(5)
         self.players = []
@@ -17,6 +19,8 @@ class State:
         self.players_not_out = []
         self.round_ended = False
         self.setup = {}
+        self.flop_dealt = False
+        self.pot = 0
 
     def deal_flop(self):
         deck = self.table.deck
@@ -24,12 +28,14 @@ class State:
         deck.burn()
         deck.deal(self.table, 3)
 
+        self.flop_dealt = True
+
     def display_players(self):
         for player in self.players:
             print(player)
 
     def change_player(self):
-        self.current_player = self.players[self.turn_number % len(self.players)]
+        self.current_player = self.players[self.turn_number % self.player_count]
         self.turn_number += 1
 
     def print_round_info(self):

@@ -14,6 +14,7 @@ class Player(object):
         self.cards = []
         self.fold = False
         self.all_in = False
+        self.ready = False
 
     def __repr__(self):
         return self.name

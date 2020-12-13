@@ -19,21 +19,24 @@ from gui.game_page import GamePage
 
 def main():
     def play(game):
-        game.init_game()
         state = game.state
         state.deal_hole()
         game_info_q.put(game)
         # state.print_round_info()
         # print()
 
-        if not state.round_ended:
-            state.deal_flop()
+        game.act_one()
+
+        # state.display_players()
+
+        # if not state.round_ended:
+        #     state.deal_flop()
             # state.print_round_info()
             # print()
-        if not state.round_ended:
-            state.ask_players()
+        # if not state.round_ended:
+        #     state.ask_players()
 
-        game_info_q.put(game)
+        # game_info_q.put(game)
         # state.print_round_info()
         # print()
 
@@ -44,8 +47,9 @@ def main():
         state.end_round()
 
         # print()
-
         input("Press enter to continue...")
+
+        game.init_game()
 
     class App(Tk):
         def __init__(self, *args, **kwargs):
@@ -97,6 +101,7 @@ def main():
 
     def run_game_data():
         game0 = Game(100)
+        game0.init_game()
         state0 = game0.state
         state0.setup = ask_app("Start?")
         players_name = state0.setup["players"]
