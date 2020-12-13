@@ -20,6 +20,7 @@ class PygamePage:
 
         font = pygame.font.Font(None, 24)
         chips_font = pygame.font.Font(None, 20)
+        button_font = pygame.font.Font(None, 50)
 
         pygame.display.set_caption("Pokermachine")
         table_img = pygame.image.load('images/600px-Poker_Table.svg.png')
@@ -118,20 +119,29 @@ class PygamePage:
             ch5_t_rect = ch5_t.get_rect()
             ch5_t_rect.x, ch5_t_rect.y = window_width-65-691//10, 144+45+50
 
+        red = (255, 0, 0)
+        size = (200, 100)
+
+        rect_border = pygame.Surface(size)
+        pygame.draw.rect(rect_border, red, rect_border.get_rect(), 10)
+
+        rect_filled = pygame.Surface(size)
+        pygame.draw.rect(rect_filled, red, rect_filled.get_rect())
+
+        button_t = button_font.render("Fold", True, font_color, font_background)
+        button_t_rect = button_t.get_rect()
+        button_t_rect.x, button_t_rect.y = 0, 0
+
         end = False
 
         while not end:
             screen.fill((220, 220, 220))
             screen.blit(table_img, table_rect)
 
-            red = (255, 0, 0)
-            size = (50, 50)
+            screen.blit(rect_filled, (0, 0))
+            screen.blit(rect_border, (0, 0))
 
-            rect_border = pygame.Surface(size)
-            pygame.draw.rect(rect_border, red, rect_border.get_rect(), 10)
-
-            rect_filled = pygame.Surface(size)
-            pygame.draw.rect(rect_filled, red, rect_filled.get_rect())
+            screen.blit(button_t, button_t_rect)
 
             screen.blit(south_table_cards, (window_width//2-53//2, window_height//2+32))
             screen.blit(south_card1, (window_width//2-53//2, window_height//2+32+70))
