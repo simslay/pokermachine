@@ -74,4 +74,4 @@ class StartPage(Frame):
         self.response_q.put(setup)
         self.game_event.set()
         controller.destroy()
-        PygamePage(self.game_info_q)
+        PygamePage(self.game_info_q, self.response_q, self.game_event)

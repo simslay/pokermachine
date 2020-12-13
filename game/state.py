@@ -19,6 +19,7 @@ class State:
         self.first_player_index = None
         self.small_blind_player = None
         self.big_blind_player = None
+        self.big_blind_index = None
         self.turn_number = 1
         self.players_not_out = []
         self.round_ended = False

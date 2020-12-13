@@ -25,11 +25,17 @@ class Game(object):
         self.state.table.init_deck()
 
     def act_one(self):
+        state = self.state
 
+        self.init_first_player()
+        self.init_blinds()
+        state.table.deck.shuffle()
+        state.deal_hole()
         self.ask_players()
 
     def ask_players(self):
-        pass
+        state = self.state
+
 
     def init_first_player(self):
         state = self.state
@@ -46,9 +52,12 @@ class Game(object):
 
             state.small_blind_player.chips -= self.small_blind
             state.big_blind_player.chips -= self.big_blind
+            state.big_blind_index = state.first_player_index
         else:
+            big_blind_index = (state.first_player_index+2)%state.player_count
             state.small_blind_player = state.players[(state.first_player_index+1)%state.player_count]
-            state.big_blind_player = state.players[(state.first_player_index+2)%state.player_count]
+            state.big_blind_player = state.players[big_blind_index]
 
             state.small_blind_player.chips -= self.small_blind
             state.big_blind_player.chips -= self.big_blind
+            state.big_blind_index = big_blind_index

@@ -20,8 +20,6 @@ from gui.game_page import GamePage
 def main():
     def play(game):
         state = game.state
-        game.init_first_player()
-        state.deal_hole()
         game.act_one()
         game_info_q.put(game)
 
@@ -110,9 +108,6 @@ def main():
 
         state0.current_player = state0.players[0]
         state0.player_count = len(state0.players)
-
-        deck = game0.state.table.deck
-        deck.shuffle()
 
         while True:
             play(game0)
