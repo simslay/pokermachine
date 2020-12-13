@@ -136,6 +136,10 @@ class PygamePage:
         check_button_t_rect = check_button_t.get_rect()
         check_button_t_rect.x, check_button_t_rect.y = 200+140//2, window_height-100+100//2
 
+        call_button_t = button_font.render("Call", True, font_color, font_background)
+        call_button_t_rect = call_button_t.get_rect()
+        call_button_t_rect.x, call_button_t_rect.y = 200+140//2, window_height-100+100//2
+
         raise_button_t = button_font.render("Raise", True, font_color, font_background)
         raise_button_t_rect = raise_button_t.get_rect()
         raise_button_t_rect.x, raise_button_t_rect.y = 200+180+200//2, window_height-100+100//2
