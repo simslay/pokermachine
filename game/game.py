@@ -28,6 +28,7 @@ class Game(object):
         state = self.state
 
         self.init_first_player()
+        print("Dealer: " + str(state.first_player))
         self.init_blinds()
         state.table.deck.shuffle()
         state.deal_hole()
@@ -35,7 +36,6 @@ class Game(object):
 
     def ask_players(self):
         state = self.state
-
 
     def init_first_player(self):
         state = self.state
