@@ -11,6 +11,9 @@ from game.table.deck import Deck
 class Table:
     def __init__(self, seats):
         self.seats = seats
-        self.deck = Deck()
-        self.cards = [] # community cards
+        self.deck = []
+        self.cards = []  # community cards
         self.pot = 0
+
+    def init_deck(self):
+        self.deck = Deck()

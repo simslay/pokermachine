@@ -19,30 +19,31 @@ from gui.game_page import GamePage
 
 def main():
     def play(game):
+        game.init_game()
         state = game.state
         state.deal_hole()
         game_info_q.put(game)
-        state.print_round_info()
-        print()
+        # state.print_round_info()
+        # print()
 
         if not state.round_ended:
             state.deal_flop()
-            state.print_round_info()
-            print()
+            # state.print_round_info()
+            # print()
         if not state.round_ended:
             state.ask_players()
 
         game_info_q.put(game)
-        state.print_round_info()
-        print()
+        # state.print_round_info()
+        # print()
 
-        print("It's " + state.current_player.name + "'s turn")
-        state.change_player()
+        # print("It's " + state.current_player.name + "'s turn")
+        # state.change_player()
 
         state.round_ended = True
         state.end_round()
 
-        print()
+        # print()
 
         input("Press enter to continue...")
 

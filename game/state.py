@@ -29,7 +29,7 @@ class State:
             print(player)
 
     def change_player(self):
-        self.current_player = self.players[self.turn_number % self.player_count]
+        self.current_player = self.players[self.turn_number % len(self.players)]
         self.turn_number += 1
 
     def print_round_info(self):
