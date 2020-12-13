@@ -119,7 +119,7 @@ class PygamePage:
             ch5_t_rect = ch5_t.get_rect()
             ch5_t_rect.x, ch5_t_rect.y = window_width-65-691//10, 144+45+50
 
-        red = (255, 0, 0)
+        red = (200, 0, 0)
         size = (200, 100)
 
         rect_border = pygame.Surface(size)
@@ -128,9 +128,17 @@ class PygamePage:
         rect_filled = pygame.Surface(size)
         pygame.draw.rect(rect_filled, red, rect_filled.get_rect())
 
-        button_t = button_font.render("Fold", True, font_color, font_background)
-        button_t_rect = button_t.get_rect()
-        button_t_rect.x, button_t_rect.y = 0, 0
+        fold_button_t = button_font.render("Fold", True, font_color, font_background)
+        fold_button_t_rect = fold_button_t.get_rect()
+        fold_button_t_rect.x, fold_button_t_rect.y = 200//2, window_height-100+100//2
+
+        check_button_t = button_font.render("Check", True, font_color, font_background)
+        check_button_t_rect = check_button_t.get_rect()
+        check_button_t_rect.x, check_button_t_rect.y = 200+140//2, window_height-100+100//2
+
+        raise_button_t = button_font.render("Raise", True, font_color, font_background)
+        raise_button_t_rect = raise_button_t.get_rect()
+        raise_button_t_rect.x, raise_button_t_rect.y = 200+180+200//2, window_height-100+100//2
 
         end = False
 
@@ -138,10 +146,17 @@ class PygamePage:
             screen.fill((220, 220, 220))
             screen.blit(table_img, table_rect)
 
-            screen.blit(rect_filled, (0, 0))
-            screen.blit(rect_border, (0, 0))
+            screen.blit(rect_filled, (0, window_height-100))
+            screen.blit(rect_border, (0, window_height-100))
+            screen.blit(fold_button_t, fold_button_t_rect)
 
-            screen.blit(button_t, button_t_rect)
+            screen.blit(rect_filled, (200, window_height-100))
+            screen.blit(rect_border, (200, window_height-100))
+            screen.blit(check_button_t, check_button_t_rect)
+
+            screen.blit(rect_filled, (400, window_height-100))
+            screen.blit(rect_border, (400, window_height-100))
+            screen.blit(raise_button_t, raise_button_t_rect)
 
             screen.blit(south_table_cards, (window_width//2-53//2, window_height//2+32))
             screen.blit(south_card1, (window_width//2-53//2, window_height//2+32+70))
