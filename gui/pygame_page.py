@@ -29,13 +29,14 @@ class PygamePage:
         button_font = pygame.font.Font(None, 50)
 
         pygame.display.set_caption("Pokermachine")
-        self.table_img = pygame.image.load('images/600px-Poker_Table.svg.png')
-        self.table_rect = self.table_img.get_rect()
-        self.table_rect.center = (window_width//2, 300)
         # clock = pygame.time.Clock()
 
         screen = pygame.display.set_mode((window_width, window_height))
         self.screen = screen
+
+        self.table_img = pygame.image.load('images/600px-Poker_Table.svg.png')
+        self.table_rect = self.table_img.get_rect()
+        self.table_rect.center = (window_width // 2, 300)
 
         self.south_table_cards = pygame.image.load('images/600px-2Cards_South.svg.png')
         self.north_table_cards = pygame.image.load('images/600px-2Cards_North.svg.png')
@@ -264,6 +265,14 @@ class PygamePage:
                         end = True
                     # if event.key == pygame.K_RETURN:
                     #     self.game.state.deal_flop()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    x, y = event.pos
+                    if 0 < x < 200 and self.window_height > y > self.window_height - 100:
+                        print('Clicked on fold')
+                    if 200 < x < 400 and self.window_height > y > self.window_height - 100:
+                        print('Clicked on check or call')
+                    if 400 < x < 600 and self.window_height > y > self.window_height - 100:
+                        print('Clicked on raise')
             # pygame.display.flip()  # mostly equivalent to pygame.display.update()
             pygame.display.update()
         pygame.quit()
