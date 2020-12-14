@@ -201,11 +201,39 @@ class PygamePage:
                     screen.blit(self.two_chips_img, (166 + 50, 144 + 50 + 30))
                     screen.blit(self.button_img, (self.window_width // 2 - 53 // 2, self.window_height // 2 - 10))
                 elif game.state.first_player_index == 1:
-                    pass
-                elif game.state.first_player_index == 1:
-                    pass
+                    screen.blit(self.one_chip_img, (166 + 50, 144 + 50 + 30))
+                    screen.blit(self.two_chips_img, (self.window_width // 2 - 53 // 2, 117 + 105))
+                    screen.blit(self.button_img, (163 + 45, self.window_height // 2 - 25))
+                elif game.state.first_player_index == 2:
+                    screen.blit(self.one_chip_img, (self.window_width // 2 - 53 // 2, 117 + 105))
+                    screen.blit(self.two_chips_img, (self.window_width // 2 - 53 // 2, self.window_height // 2 - 10))
+                    screen.blit(self.button_img, (166 + 50, 144 + 50 + 30))
                 else:
-                    pass
+                    screen.blit(self.one_chip_img, (self.window_width // 2 - 53 // 2, self.window_height // 2 - 10))
+                    screen.blit(self.two_chips_img, (163 + 45, self.window_height // 2 - 25))
+                    screen.blit(self.button_img, (self.window_width // 2 - 53 // 2, 117 + 105))
+
+            if game.state.player_count == 5:
+                if game.state.first_player_index == 0:
+                    screen.blit(self.one_chip_img, (163 + 45, self.window_height // 2 - 25))
+                    screen.blit(self.two_chips_img, (166 + 50, 144 + 50 + 30))
+                    screen.blit(self.button_img, (self.window_width // 2 - 53 // 2, self.window_height // 2 - 10))
+                elif game.state.first_player_index == 1:
+                    screen.blit(self.one_chip_img, (166 + 50, 144 + 50 + 30))
+                    screen.blit(self.two_chips_img, (self.window_width // 2 - 53 // 2, 117 + 85))
+                    screen.blit(self.button_img, (163 + 45, self.window_height // 2 - 25))
+                elif game.state.first_player_index == 2:
+                    screen.blit(self.one_chip_img, (self.window_width // 2 - 53 // 2, 117 + 85))
+                    screen.blit(self.two_chips_img, (self.window_width - 217 - 35, 144 + 50 + 40))
+                    screen.blit(self.button_img, (166 + 50, 144 + 50 + 30))
+                elif game.state.first_player_index == 3:
+                    screen.blit(self.one_chip_img, (self.window_width - 217 - 35, 144 + 50 + 40))
+                    screen.blit(self.two_chips_img, (self.window_width // 2 - 53 // 2, self.window_height // 2 - 10))
+                    screen.blit(self.button_img, (self.window_width // 2 - 53 // 2, 117 + 85))
+                elif game.state.first_player_index == 4:
+                    screen.blit(self.one_chip_img, (self.window_width // 2 - 53 // 2, self.window_height // 2 - 10))
+                    screen.blit(self.two_chips_img, (163 + 45, self.window_height // 2 - 25))
+                    screen.blit(self.button_img, (self.window_width - 217 - 35, 144 + 50 + 40))
 
             screen.blit(self.rect_filled, (0, self.window_height - 100))
             screen.blit(self.rect_border, (0, self.window_height - 100))
@@ -243,7 +271,7 @@ class PygamePage:
                 screen.blit(self.ch3_t, self.ch3_t_rect)
 
             if len(game.state.players) > 3:
-                screen.blit(self.north_table_cards, (self.window_width // 2 - 53 // 2, 117 + 30))
+                screen.blit(self.north_table_cards, (self.window_width // 2 - 53 // 2, 117 + 50))
                 screen.blit(self.north_card1, (self.window_width // 2 - 53 // 2, 10 + 10))
                 screen.blit(self.north_card2, (self.window_width // 2, 10 + 10))
                 screen.blit(self.p4_t, self.p4_t_rect)
@@ -272,7 +300,7 @@ class PygamePage:
                     if 200 < x < 400 and self.window_height > y > self.window_height - 100:
                         print('Clicked on check or call')
                     if 400 < x < 600 and self.window_height > y > self.window_height - 100:
-                        print('Clicked on raise')
+                        print('Clicked on bet or raise')
             # pygame.display.flip()  # mostly equivalent to pygame.display.update()
             pygame.display.update()
         pygame.quit()
