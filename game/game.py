@@ -48,12 +48,13 @@ class Game(object):
         state = self.state
 
         if state.player_count == 2:
-            state.small_blind_player = state.players[(state.first_player_index+1)%2]
-            state.big_blind_player = state.players[state.first_player_index]
+            big_blind_index = (state.first_player_index + 1) % 2
+            state.small_blind_player = state.players[state.first_player_index]
+            state.big_blind_player = state.players[big_blind_index]
 
             state.small_blind_player.chips -= self.small_blind
             state.big_blind_player.chips -= self.big_blind
-            state.big_blind_index = state.first_player_index
+            state.big_blind_index = big_blind_index
         else:
             big_blind_index = (state.first_player_index+2)%state.player_count
             state.small_blind_player = state.players[(state.first_player_index+1)%state.player_count]
