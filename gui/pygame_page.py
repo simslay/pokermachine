@@ -51,7 +51,7 @@ class PygamePage:
         self.p1_t = font.render(self.player1.name, True, font_color, font_background)
         self.p1_t_rect = self.p1_t.get_rect()
         self.p1_t_rect.x, self.p1_t_rect.y = window_width//2-53//2, window_height//2+32+70-18
-        self.ch1_t = chips_font.render(str(self.game.starting_chips) + " chips", True, font_color, font_background)
+        self.ch1_t = chips_font.render(str(self.player1.chips) + " chips", True, font_color, font_background)
         self.ch1_t_rect = self.ch1_t.get_rect()
         self.ch1_t_rect.x, self.ch1_t_rect.y = window_width//2-53//2, window_height//2+32+70+1056//10
 
@@ -62,7 +62,7 @@ class PygamePage:
         self.p2_t = font.render(self.player2.name, True, font_color, font_background)
         self.p2_t_rect = self.p2_t.get_rect()
         self.p2_t_rect.x, self.p2_t_rect.y = 40, window_height//2-6-18
-        self.ch2_t = chips_font.render(str(self.game.starting_chips) + " chips", True, font_color, font_background)
+        self.ch2_t = chips_font.render(str(self.player2.chips) + " chips", True, font_color, font_background)
         self.ch2_t_rect = self.ch2_t.get_rect()
         self.ch2_t_rect.x, self.ch2_t_rect.y = 40, window_height//2-6+1056//10
 
@@ -122,7 +122,7 @@ class PygamePage:
             self.p5_t = font.render(self.player5.name, True, font_color, font_background)
             self.p5_t_rect = self.p5_t.get_rect()
             self.p5_t_rect.x, self.p5_t_rect.y = window_width-65-691//10, 144-1056//10+45-18+50
-            self.ch5_t = chips_font.render(str(self.player4.chips) + " chips", True, font_color, font_background)
+            self.ch5_t = chips_font.render(str(self.player5.chips) + " chips", True, font_color, font_background)
             self.ch5_t_rect = self.ch5_t.get_rect()
             self.ch5_t_rect.x, self.ch5_t_rect.y = window_width-65-691//10, 144+45+50
 

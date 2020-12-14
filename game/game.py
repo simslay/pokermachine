@@ -16,6 +16,7 @@ class Game(object):
 
     def __init__(self, starting_chips, starting_stake, small_blind, big_blind):
         self.starting_chips = starting_chips
+        self.starting_stake = starting_stake
         self.small_blind = small_blind
         self.big_blind = big_blind
 

@@ -81,6 +81,7 @@ def main():
         app = App()
         app.mainloop()
 
+    # from game data to app
     def ask_app(question, game=""):
         print("asking...")
         print(question)
