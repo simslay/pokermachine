@@ -39,10 +39,13 @@ class PygamePage:
 
         self.south_table_cards = pygame.image.load('images/600px-2Cards_South.svg.png')
         self.north_table_cards = pygame.image.load('images/600px-2Cards_North.svg.png')
-        self.south_table_east_cards = pygame.image.load('images/600px-2Cards_South-East.svg.png')
+        self.south_east_table_cards = pygame.image.load('images/600px-2Cards_South-East.svg.png')
         self.south_west_table_cards = pygame.image.load('images/600px-2Cards_South-West.svg.png')
         self.north_east_table_cards = pygame.image.load('images/600px-2Cards_North-East.svg.png')
         self.north_west_table_cards = pygame.image.load('images/600px-2Cards_North-West.svg.png')
+        self.button_img = pygame.image.load('images/600px-Button.svg.png')
+        self.one_chip_img = pygame.image.load('images/600px-1chip.svg.png')
+        self.two_chips_img = pygame.image.load('images/600px-2chips.svg.png')
 
         self.south_card1 = pygame.image.load('images/cards/' + str(self.player1.cards[0]) + '.png')
         self.south_card1 = pygame.transform.scale(self.south_card1, (691//10, 1056//10))
@@ -166,6 +169,27 @@ class PygamePage:
             screen.fill((220, 220, 220))
             screen.blit(self.table_img, self.table_rect)
 
+            if game.state.player_count == 2:
+                if game.state.first_player_index == 0:
+                    screen.blit(self.one_chip_img, (163 + 45, self.window_height // 2 - 25))
+                    screen.blit(self.two_chips_img,
+                                (self.window_width // 2 - 53 // 2 + 25, self.window_height // 2 - 10))
+                    screen.blit(self.button_img, (self.window_width // 2 - 53 // 2 - 15, self.window_height // 2 - 10))
+                else:
+                    screen.blit(self.one_chip_img, (self.window_width // 2 - 53 // 2, self.window_height // 2 - 10))
+                    screen.blit(self.two_chips_img, (163 + 45 + 15, self.window_height // 2 - 5))
+                    screen.blit(self.button_img, (163 + 45 - 20, self.window_height // 2 - 40))
+
+            if game.state.player_count == 3:
+                if game.state.first_player_index == 0:
+                    screen.blit(self.one_chip_img, (163 + 45, self.window_height // 2 - 25))
+                    screen.blit(self.two_chips_img, (166 + 50, 144 + 50 + 30))
+                    screen.blit(self.button_img, (self.window_width // 2 - 53 // 2, self.window_height // 2 - 10))
+                elif game.state.first_player_index == 1:
+                    pass
+                else:
+                    pass
+
             screen.blit(self.rect_filled, (0, self.window_height - 100))
             screen.blit(self.rect_border, (0, self.window_height - 100))
             screen.blit(self.fold_button_t, self.fold_button_t_rect)
@@ -194,29 +218,29 @@ class PygamePage:
             screen.blit(self.p2_t, self.p2_t_rect)
             screen.blit(self.ch2_t, self.ch2_t_rect)
 
-            if len(self.game.state.players) > 2:
+            if len(game.state.players) > 2:
                 screen.blit(self.north_west_table_cards, (166, 144 + 50))
                 screen.blit(self.north_west_card1, (40, 144 - 1056 // 10 + 45 + 50))
                 screen.blit(self.north_west_card2, (60, 144 - 1056 // 10 + 45 + 50))
                 screen.blit(self.p3_t, self.p3_t_rect)
                 screen.blit(self.ch3_t, self.ch3_t_rect)
 
-            if len(self.game.state.players) > 3:
+            if len(game.state.players) > 3:
                 screen.blit(self.north_table_cards, (self.window_width // 2 - 53 // 2, 117 + 30))
                 screen.blit(self.north_card1, (self.window_width // 2 - 53 // 2, 10 + 10))
                 screen.blit(self.north_card2, (self.window_width // 2, 10 + 10))
                 screen.blit(self.p4_t, self.p4_t_rect)
                 screen.blit(self.ch4_t, self.ch4_t_rect)
 
-            if len(self.game.state.players) > 4:
+            if len(game.state.players) > 4:
                 screen.blit(self.north_east_table_cards, (self.window_width - 217, 144 + 50))
                 screen.blit(self.north_east_card1, (self.window_width - 65 - 691 // 10, 144 - 1056 // 10 + 45 + 50))
                 screen.blit(self.north_east_card2, (self.window_width - 45 - 691 // 10, 144 - 1056 // 10 + 45 + 50))
                 screen.blit(self.p5_t, self.p5_t_rect)
                 screen.blit(self.ch5_t, self.ch5_t_rect)
 
-            if len(self.game.state.players) > 5:
-                screen.blit(self.south_table_east_cards, (self.window_width - 217, self.window_height // 2 - 6))
+            if len(game.state.players) > 5:
+                screen.blit(self.south_east_table_cards, (self.window_width - 217, self.window_height // 2 - 6))
 
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
