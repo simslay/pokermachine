@@ -239,13 +239,13 @@ class PygamePage:
             screen.blit(self.rect_border, (0, self.window_height - 100))
             screen.blit(self.fold_button_t, self.fold_button_t_rect)
 
-            screen.blit(self.rect_filled, (200, self.window_height - 100))
-            screen.blit(self.rect_border, (200, self.window_height - 100))
-            screen.blit(self.check_button_t, self.check_button_t_rect)
-
             # screen.blit(self.rect_filled, (200, self.window_height - 100))
             # screen.blit(self.rect_border, (200, self.window_height - 100))
-            # screen.blit(self.call_button_t, self.call_button_t_rect)
+            # screen.blit(self.check_button_t, self.check_button_t_rect)
+
+            screen.blit(self.rect_filled, (200, self.window_height - 100))
+            screen.blit(self.rect_border, (200, self.window_height - 100))
+            screen.blit(self.call_button_t, self.call_button_t_rect)
 
             screen.blit(self.rect_filled, (400, self.window_height - 100))
             screen.blit(self.rect_border, (400, self.window_height - 100))
@@ -298,7 +298,7 @@ class PygamePage:
                     if 0 < x < 200 and self.window_height > y > self.window_height - 100:
                         print('Clicked on fold')
                     if 200 < x < 400 and self.window_height > y > self.window_height - 100:
-                        print('Clicked on check or call')
+                        print('Clicked on call or check')
                     if 400 < x < 600 and self.window_height > y > self.window_height - 100:
                         print('Clicked on bet or raise')
             # pygame.display.flip()  # mostly equivalent to pygame.display.update()
