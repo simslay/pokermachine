@@ -220,16 +220,16 @@ class PygamePage:
                     screen.blit(self.button_img, (self.window_width // 2 - 53 // 2, self.window_height // 2 - 10))
                 elif game.state.first_player_index == 1:
                     screen.blit(self.one_chip_img, (166 + 50, 144 + 50 + 30))
-                    screen.blit(self.two_chips_img, (self.window_width // 2 - 53 // 2, 117 + 85))
+                    screen.blit(self.two_chips_img, (self.window_width // 2 - 53 // 2, 117 + 105))
                     screen.blit(self.button_img, (163 + 45, self.window_height // 2 - 25))
                 elif game.state.first_player_index == 2:
-                    screen.blit(self.one_chip_img, (self.window_width // 2 - 53 // 2, 117 + 85))
+                    screen.blit(self.one_chip_img, (self.window_width // 2 - 53 // 2, 117 + 105))
                     screen.blit(self.two_chips_img, (self.window_width - 217 - 35, 144 + 50 + 40))
                     screen.blit(self.button_img, (166 + 50, 144 + 50 + 30))
                 elif game.state.first_player_index == 3:
                     screen.blit(self.one_chip_img, (self.window_width - 217 - 35, 144 + 50 + 40))
                     screen.blit(self.two_chips_img, (self.window_width // 2 - 53 // 2, self.window_height // 2 - 10))
-                    screen.blit(self.button_img, (self.window_width // 2 - 53 // 2, 117 + 85))
+                    screen.blit(self.button_img, (self.window_width // 2 - 53 // 2, 117 + 105))
                 elif game.state.first_player_index == 4:
                     screen.blit(self.one_chip_img, (self.window_width // 2 - 53 // 2, self.window_height // 2 - 10))
                     screen.blit(self.two_chips_img, (163 + 45, self.window_height // 2 - 25))
