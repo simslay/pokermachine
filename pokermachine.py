@@ -42,7 +42,7 @@ def main():
         state.end_round()
 
         # print()
-        input("Press enter to continue...")
+        input("Press enter to continue...\n")
 
         game.init_game()
 

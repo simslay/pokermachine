@@ -62,26 +62,28 @@ class StartPage(Frame):
             "chips": chip_entry_list
         }
 
+        print("Connect to server")
         n = Network()
+        print("Get player number")
         p = int(n.getP())
         print("You are player", p)
 
-        while True:
-            try:
-                game = n.send("get")
+        try:
+            print("Receive game")
+            game = n.send(entry0)
+            print("Sent", entry0)
 
-                self.game_info_q.put(game)
+            self.game_info_q.put(game)
 
-                self.response_q.put(setup)
-                self.game_event.set()
+            self.response_q.put(setup)
+            self.game_event.set()
 
-                if game.connected():
-                    print("Game connected")
-                    controller.destroy()
-                    PygamePage(self.game_info_q, self.response_q, self.game_event)
-                    break
-                else:
-                    print("Waiting for a new player...")
-            except Exception as e:
-                print("Couldn't get game:", str(e))
-                return
+            if game.connected():
+                print("Game connected")
+                controller.destroy()
+                PygamePage(self.game_info_q, self.response_q, self.game_event)
+            else:
+                print("Waiting for a new player...")
+        except Exception as e:
+            print("Couldn't get game:", str(e))
+            return

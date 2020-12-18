@@ -14,6 +14,7 @@ class PygamePage:
         font_background = (0, 0, 0)
         self.game_info_q = game_info_q
         self.game = game_info_q.get()
+        print("Players:", str(self.game.state.players))
         self.player1 = self.game.state.players[0]
         self.player2 = self.game.state.players[1]
         self.player3 = None

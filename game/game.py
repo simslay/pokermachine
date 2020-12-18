@@ -21,6 +21,9 @@ class Game(object):
         self.big_blind = big_blind
         self.ready = False
 
+    # def __repr__(self):
+    #     return str(self.state.players[0].cards)
+
     def init_game(self):
         self.game_over = False
         self.state = State()
@@ -30,6 +33,7 @@ class Game(object):
         return self.ready
 
     def act_one(self):
+        print("Enter act_one")
         state = self.state
 
         self.init_first_player()
@@ -43,10 +47,12 @@ class Game(object):
         state = self.state
 
     def init_first_player(self):
+        print("Enter init_first_player")
         state = self.state
 
         state.first_player_index = randrange(state.player_count)
         state.first_player = state.players[state.first_player_index]
+        print("End of init_first_player")
 
     def init_blinds(self):
         state = self.state
