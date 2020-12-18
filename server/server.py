@@ -32,6 +32,8 @@ def threaded_client(conn, p, gameId):
     while True:
         try:
             data = conn.recv(4096).decode()
+
+            conn.sendall(pickle.dumps("ok"))
         except:
             break
 
