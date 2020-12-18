@@ -14,7 +14,7 @@ from game.game import Game
 # from game.scorer import Scorer
 from game.player.player import Player
 from gui.start_page import StartPage
-from gui.game_page import GamePage
+from client.network import Network
 
 
 def main():
@@ -58,7 +58,7 @@ def main():
 
             self.frames = {}
 
-            list_of_frames = [StartPage, GamePage]
+            list_of_frames = [StartPage]
 
             for F in list_of_frames:
                 frame = F(container, self, response_q, game_info_q, game_event)
@@ -73,7 +73,7 @@ def main():
             print("waiting")
             if not self.fresh:
                 time.sleep(0.1)
-                frame.update_frame(game_info_q.get())
+                # frame.update_frame(game_info_q.get())
             self.fresh = False
             frame.tkraise()
 
