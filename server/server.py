@@ -25,14 +25,24 @@ print("Server Started. Waiting for a connection")
 
 
 def threaded_client(conn, p, gameId):
+    print("New client thread started")
     global idCount
     conn.send(str.encode(str(p)))
+
+    while True:
+        try:
+            data = conn.recv(4096).decode()
+        except:
+            break
+
+    print("Lost connection")
 
 while True:
     conn, addr = s.accept()
     print("Connected to:", addr)
 
-    p = 0
     idCount += 1
+    p = 0
+    gameId = (idCount - 1) // 2
 
     start_new_thread(threaded_client, (conn, p, gameId))

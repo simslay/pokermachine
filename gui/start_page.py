@@ -8,6 +8,7 @@ Created on Mon Dec 07 17:58:00 2020
 import tkinter as tk
 from tkinter import *
 from gui.pygame_page import PygamePage
+from client.network import Network
 
 
 class StartPage(Frame):
@@ -22,6 +23,10 @@ class StartPage(Frame):
         width = 800
         canvas = Canvas(self, height=height, width=width, bg="light green")
         canvas.pack()
+
+        n = Network()
+        p = int(n.getP())
+        print("You are player", p)
 
         top_frame = Frame(canvas, bg='green', bd=5)
         top_frame.place(relx=0, rely=0, relwidth=1, relheight=0.2, anchor='nw')

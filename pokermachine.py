@@ -14,7 +14,6 @@ from game.game import Game
 # from game.scorer import Scorer
 from game.player.player import Player
 from gui.start_page import StartPage
-from client.network import Network
 
 
 def main():
