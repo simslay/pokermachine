@@ -21,33 +21,20 @@ class StartPage(Frame):
 
         height = 500
         width = 800
-        canvas = Canvas(self, height=height, width=width, bg="light green")
-        canvas.pack()
+        self.canvas = Canvas(self, height=height, width=width, bg="light green")
+        self.canvas.pack()
 
-        n = Network()
-        p = int(n.getP())
-        print("You are player", p)
-
-        try:
-            game = n.send("get")
-        except:
-            run = False
-            print("Couldn't get game")
-            return
-
-        print(game)
-
-        top_frame = Frame(canvas, bg='green', bd=5)
+        top_frame = Frame(self.canvas, bg='green', bd=5)
         top_frame.place(relx=0, rely=0, relwidth=1, relheight=0.2, anchor='nw')
         name_frame = Frame(top_frame, bg="light green", bd=5)
-        name_frame.place(relx=0.5, rely=0.27, relwidth=0.9, relheight=0.5, anchor="n")
+        name_frame.place(relx=0.5, rely=0.27, relwidth=0.5, relheight=0.5, anchor="n")
         self.entry_p0 = Entry(name_frame, font=("Courier", 12), bd=3)
         self.entry_p0.place(relwidth=1, relheight=1)
         enter_player_label = Label(top_frame, text="Enter your name:", font=("Courier", 12), bd=3)
         enter_player_label.place(relx=0.25, rely=0.07, relwidth=0.5, relheight=0.15)
         # self.entry.bind("<Return>", lambda _: self.button_click(self.entry.get()))
 
-        bottom_frame = Frame(canvas, bg='green', bd=5)
+        bottom_frame = Frame(self.canvas, bg='green', bd=5)
         bottom_frame.place(relx=0.5, rely=1, relwidth=1, relheight=0.8, anchor='s')
 
         button = Button(bottom_frame, text="START", font=("Courier", 12),
@@ -75,7 +62,26 @@ class StartPage(Frame):
             "chips": chip_entry_list
         }
 
-        self.response_q.put(setup)
-        self.game_event.set()
-        controller.destroy()
-        PygamePage(self.game_info_q, self.response_q, self.game_event)
+        n = Network()
+        p = int(n.getP())
+        print("You are player", p)
+
+        while True:
+            try:
+                game = n.send("get")
+
+                self.game_info_q.put(game)
+
+                self.response_q.put(setup)
+                self.game_event.set()
+
+                if game.connected():
+                    print("Game connected")
+                    controller.destroy()
+                    PygamePage(self.game_info_q, self.response_q, self.game_event)
+                    break
+                else:
+                    print("Waiting for a new player...")
+            except Exception as e:
+                print("Couldn't get game:", str(e))
+                return

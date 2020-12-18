@@ -5,6 +5,7 @@ import time
 
 class PygamePage:
     def __init__(self, game_info_q, response_q, game_event):
+        print("Initialize game page")
         self.window_width = 800
         self.window_height = 700
         window_width = self.window_width

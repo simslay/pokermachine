@@ -19,11 +19,15 @@ class Game(object):
         self.starting_stake = starting_stake
         self.small_blind = small_blind
         self.big_blind = big_blind
+        self.ready = False
 
     def init_game(self):
         self.game_over = False
         self.state = State()
         self.state.table.init_deck()
+
+    def connected(self):
+        return self.ready
 
     def act_one(self):
         state = self.state
