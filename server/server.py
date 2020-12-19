@@ -41,15 +41,24 @@ def threaded_client(conn, p):
                 break
             else:
                 print("Received", data)
-                game.state.players.append(Player(data, 100, 1000))
+
+                if data.startswith("name/"):
+                    tab = data.split("/")
+                    game.state.players.append(Player(tab[1], 100, 1000))
+                    print("Players:", str(game.state.players))
+
+                    if idCount == 2:
+                        state = game.state
+                        state.players_not_out = state.players
+                        state.current_player = state.players[0]
+                        state.player_count = len(state.players)
+                        print("Act one")
+                        game.act_one()
+                        game.ready = True
+                if data == "get/":
+                    print("Players:", str(game.state.players))
+
                 print("Send game")
-                print("Players:", str(game.state.players))
-                if idCount == 2:
-                    state.players_not_out = state.players
-                    state.current_player = state.players[0]
-                    state.player_count = len(state.players)
-                    print("Act one")
-                    game.act_one()
                 conn.sendall(pickle.dumps(game))
         except:
             break
@@ -65,15 +74,14 @@ while True:
     p = 0
 
     if idCount == 2:
-        game.ready = True
-        state = game.state
+        # state = game.state
         # state.players.append(Player(name, 100, 1000))
         p = 1
     else:
         print("Create game")
         game = Game(100, 1000, 1, 2)
         game.init_game()
-        state = game.state
+        # state = game.state
         # state.players.append(Player(name, 100, 1000))
         # state.setup = setup
         # chips = setup["chips"]
