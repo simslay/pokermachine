@@ -83,7 +83,7 @@ while True:
         p = 1
     else:
         print("Create game")
-        game = Game(100, 1000, 1, 2)
+        game = Game(conn, 100, 1000, 1, 2)
         game.init_game()
         # state = game.state
         # state.players.append(Player(name, 100, 1000))

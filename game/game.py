@@ -14,7 +14,8 @@ class Game(object):
     game_over = None
     state = None
 
-    def __init__(self, starting_chips, starting_stake, small_blind, big_blind):
+    def __init__(self, conn, starting_chips, starting_stake, small_blind, big_blind):
+        self.conn = conn
         self.starting_chips = starting_chips
         self.starting_stake = starting_stake
         self.small_blind = small_blind
@@ -36,38 +37,70 @@ class Game(object):
         print("Enter act_one")
         state = self.state
 
-        self.init_first_player()
-        print("Dealer: " + str(state.first_player))
+        self.init_dealer()
+        print("Dealer: " + str(state.dealer))
         self.init_blinds()
         state.table.deck.shuffle()
         state.deal_hole()
-        self.ask_players()
+
+        self.init_dealer()
+        self.init_current_player()
+
+        # self.ask_players()
+
+        # self.state.pot += self.small_blind + self.big_blind
 
     def ask_players(self):
         state = self.state
 
-    def init_first_player(self):
-        print("Enter init_first_player")
+        for player in state.players_not_out:
+            player.ready = False
+
+        while True:
+            player_ready = self.answer(state.players_not_out[state.current_player_index])
+            state.current_player_index += 1
+            state.current_player_index %= len(state.players_not_out)
+            state.current_player = state.players_not_out[state.current_player_index]
+            if player_ready:
+                state.ready_list.append(state.current_player)
+            if len(state.ready_list) == len(state.players_not_out):
+                break
+
+    def answer(self, player):
         state = self.state
 
-        state.first_player_index = randrange(state.player_count)
-        state.first_player = state.players[state.first_player_index]
-        print("End of init_first_player")
+        return True
+
+    def init_dealer(self):
+        state = self.state
+
+        state.dealer_index = randrange(state.player_count)
+        state.dealer = state.players[state.dealer_index]
+
+    def init_current_player(self):
+        state = self.state
+
+        if state.player_count == 2:
+            state.current_player_index = state.dealer_index
+        else:
+            state.current_player_index = (state.dealer_index + 3) % len(state.players_not_out)
+
+        state.current_player = state.players_not_out[state.current_player_index]
 
     def init_blinds(self):
         state = self.state
 
         if state.player_count == 2:
-            big_blind_index = (state.first_player_index + 1) % 2
-            state.small_blind_player = state.players[state.first_player_index]
+            big_blind_index = (state.dealer_index + 1) % 2
+            state.small_blind_player = state.players[state.dealer_index]
             state.big_blind_player = state.players[big_blind_index]
 
             state.small_blind_player.chips -= self.small_blind
             state.big_blind_player.chips -= self.big_blind
             state.big_blind_index = big_blind_index
         else:
-            big_blind_index = (state.first_player_index+2)%state.player_count
-            state.small_blind_player = state.players[(state.first_player_index+1)%state.player_count]
+            big_blind_index = (state.dealer_index + 2) % state.player_count
+            state.small_blind_player = state.players[(state.dealer_index + 1) % state.player_count]
             state.big_blind_player = state.players[big_blind_index]
 
             state.small_blind_player.chips -= self.small_blind

@@ -15,8 +15,9 @@ class State:
         self.table = Table(5)
         self.players = []
         self.current_player = None
-        self.first_player = None
-        self.first_player_index = None
+        self.current_player_index = None
+        self.dealer = None
+        self.dealer_index = None
         self.small_blind_player = None
         self.big_blind_player = None
         self.big_blind_index = None
@@ -26,6 +27,8 @@ class State:
         self.setup = {}
         self.flop_dealt = False
         self.pot = 0
+        self.ready_list = []
+        self.fold_out = False
 
     def deal_flop(self):
         deck = self.table.deck
