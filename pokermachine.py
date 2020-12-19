@@ -35,14 +35,8 @@ def main():
         # state.print_round_info()
         # print()
 
-        # print("It's " + state.current_player.name + "'s turn")
-        # state.change_player()
-
         state.round_ended = True
         state.end_round()
-
-        # print()
-        input("Press enter to continue...\n")
 
         game.init_game()
 
@@ -80,45 +74,10 @@ def main():
         app = App()
         app.mainloop()
 
-    # from game data to app
-    def ask_app(question, game=""):
-        print("asking...")
-        print(question)
-        answer = ""
-        if game != "":
-            game_info_q.put(game)
-
-        game_event.wait()
-        if not response_q.empty():
-            answer = response_q.get()
-        game_event.clear()
-
-        return answer
-
-    def run_game_data():
-        setup = ask_app("Start?")
-        chips = setup["chips"]
-        players_name = setup["players"]
-        game0 = Game(chips[0], chips[1], chips[2], chips[3])
-        game0.init_game()
-        state0 = game0.state
-        state0.setup = setup
-        state0.players = [Player(name, chips[0], chips[1]) for name in players_name if name != ""]
-        state0.players_not_out = state0.players
-
-        state0.current_player = state0.players[0]
-        state0.player_count = len(state0.players)
-
-        while True:
-            play(game0)
-
     game_event = threading.Event()
     response_q = queue.Queue()
     game_info_q = queue.Queue()
-    t1 = threading.Thread(target=run_app)
-    t1.start()
-    t2 = threading.Thread(target=run_game_data)
-    t2.start()
+    run_app()
 
 
 if __name__ == "__main__":

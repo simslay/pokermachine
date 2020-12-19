@@ -35,12 +35,16 @@ def threaded_client(conn, p):
 
     while True:
         try:
+            print("Waiting...")
             data = conn.recv(4096).decode()
 
             if not data:
                 break
             else:
                 print("Received", data)
+
+                if game.connected():
+                    pass
 
                 if data.startswith("name/"):
                     tab = data.split("/")

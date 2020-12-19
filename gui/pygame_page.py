@@ -159,10 +159,6 @@ class PygamePage:
 
         self.update_screen(self.game)
 
-        # while 1:
-        #     pygame.display.update()
-        #     clock.tick(60)
-
     def update_screen(self, game):
         screen = self.screen
 
@@ -295,6 +291,11 @@ class PygamePage:
                         end = True
                     # if event.key == pygame.K_RETURN:
                     #     self.game.state.deal_flop()
+                if event.type == pygame.QUIT:
+                    run = False
+                    pygame.quit()
+                    quit()
+                    end = True
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     x, y = event.pos
                     if 0 < x < 200 and self.window_height > y > self.window_height - 100:
