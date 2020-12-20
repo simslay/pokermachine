@@ -21,7 +21,8 @@ class PygamePage:
         self.player4 = None
         self.player5 = None
         self.player_name = player_name
-        self.player = self.player1 if self.player1.name == player_name else self.player2
+        self.player = game.get_player(player_name)
+        self.actions_available = None
 
         os.environ['SDL_VIDEO_CENTERED'] = '1'
         pygame.init()
@@ -166,11 +167,13 @@ class PygamePage:
     def update_screen(self, game):
         screen = self.screen
 
-        end = False
+        run = True
 
-        while not end:
+        while run:
             screen.fill((220, 220, 220))
             screen.blit(self.table_img, self.table_rect)
+
+            player = game.get_player(self.player_name)
 
             if game.state.player_count == 2:
                 if game.state.dealer_index == 0:
@@ -237,7 +240,7 @@ class PygamePage:
                     screen.blit(self.two_chips_img, (163 + 45, self.window_height // 2 - 25))
                     screen.blit(self.button_img, (self.window_width - 217 - 35, 144 + 50 + 40))
 
-            if self.game.state.current_player == self.player:
+            if game.state.current_player == player and not player.fold:
                 screen.blit(self.rect_filled, (0, self.window_height - 100))
                 screen.blit(self.rect_border, (0, self.window_height - 100))
                 screen.blit(self.fold_button_t, self.fold_button_t_rect)
@@ -253,6 +256,13 @@ class PygamePage:
                 screen.blit(self.rect_filled, (400, self.window_height - 100))
                 screen.blit(self.rect_border, (400, self.window_height - 100))
                 screen.blit(self.raise_button_t, self.raise_button_t_rect)
+
+                self.actions_available = True
+            else:
+                self.actions_available = False
+
+            if player.fold:
+                print("You have fold")
 
             screen.blit(self.south_table_cards, (self.window_width // 2 - 53 // 2, self.window_height // 2 + 32))
             screen.blit(self.south_card1, (self.window_width // 2 - 53 // 2, self.window_height // 2 + 32 + 70))
@@ -293,23 +303,23 @@ class PygamePage:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        end = True
+                        run = False
                     # if event.key == pygame.K_RETURN:
                     #     self.game.state.deal_flop()
                 if event.type == pygame.QUIT:
                     run = False
                     pygame.quit()
                     quit()
-                    end = True
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    x, y = event.pos
-                    if 0 < x < 200 and self.window_height > y > self.window_height - 100:
-                        print('Clicked on fold')
-                        self.n.send("fold/" + self.player_name)
-                    if 200 < x < 400 and self.window_height > y > self.window_height - 100:
-                        print('Clicked on call or check')
-                    if 400 < x < 600 and self.window_height > y > self.window_height - 100:
-                        print('Clicked on bet or raise')
+                    if self.actions_available:
+                        x, y = event.pos
+                        if 0 < x < 200 and self.window_height > y > self.window_height - 100:
+                            game = self.n.send("fold/" + self.player_name)
+                        if 200 < x < 400 and self.window_height > y > self.window_height - 100:
+                            print('Clicked on call or check')
+                        if 400 < x < 600 and self.window_height > y > self.window_height - 100:
+                            print('Clicked on bet or raise')
+
             # pygame.display.flip()  # mostly equivalent to pygame.display.update()
             pygame.display.update()
         pygame.quit()

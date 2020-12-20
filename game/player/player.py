@@ -15,6 +15,9 @@ class Player(object):
         self.fold = False
         self.all_in = False
         self.ready = False
+        self.action_done = False
 
     def __repr__(self):
+        res = "Player[name=" + self.name + ", fold=" + str(self.fold) + "]"
+
         return self.name

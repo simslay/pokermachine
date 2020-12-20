@@ -51,11 +51,11 @@ class Game(object):
         state.current_player = state.players_not_out[state.current_player_index]
 
         for player in state.players_not_out:
-            player.ready = False
+            player.action_done = False
 
-        while True:
-            if state.current_player.fold:
-                break
+        # while True:
+        #     if state.current_player.action_done:
+        #         break
         # while True:
         #     state.current_player
         #     if player_ready:

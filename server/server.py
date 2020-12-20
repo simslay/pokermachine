@@ -41,7 +41,7 @@ def threaded_client(conn, p):
             if not data:
                 break
             else:
-                # print("Received", data)
+                print("Received", data)
 
                 if game.connected():
                     pass
@@ -49,12 +49,12 @@ def threaded_client(conn, p):
                 if data.startswith("name/"):
                     tab = data.split("/")
                     game.state.players.append(Player(tab[1], 100, 1000))
-                    print("Players:", str(game.state.players))
+                    # print("Players:", str(game.state.players))
 
                     if idCount == 2:
                         state = game.state
                         state.players_not_out = state.players
-                        state.current_player = state.players[0]
+                        # state.current_player = state.players[0]
                         state.player_count = len(state.players)
                         game.init_dealer()
                         game.init_current_player()
@@ -68,6 +68,7 @@ def threaded_client(conn, p):
                     name = data.split("/")[1]
                     player = game.get_player(name)
                     player.fold = True
+                    player.action_done = True
 
                 # print("Send game")
                 conn.sendall(pickle.dumps(game))
