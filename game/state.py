@@ -26,9 +26,9 @@ class State:
         self.round_ended = False
         self.setup = {}
         self.flop_dealt = False
-        self.pot = 0
         self.ready_list = []
-        self.fold_out = False
+        self.pot = 0
+        self.current_bet = 0
 
     def deal_flop(self):
         deck = self.table.deck

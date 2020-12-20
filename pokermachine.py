@@ -6,13 +6,8 @@ Created on Sun Dec 06 2020
 """
 
 
-import threading
-import queue
 import time
 from tkinter import *
-from game.game import Game
-# from game.scorer import Scorer
-from game.player.player import Player
 from gui.start_page import StartPage
 
 
@@ -20,7 +15,7 @@ def main():
     def play(game):
         state = game.state
         game.act_one()
-        game_info_q.put(game)
+        # game_info_q.put(game)
 
         # state.display_players()
 
@@ -54,7 +49,7 @@ def main():
             list_of_frames = [StartPage]
 
             for F in list_of_frames:
-                frame = F(container, self, response_q, game_info_q, game_event)
+                frame = F(container, self)
                 self.frames[F] = frame
                 frame.grid(row=0, column=0, sticky="nsew")
 
@@ -70,14 +65,8 @@ def main():
             self.fresh = False
             frame.tkraise()
 
-    def run_app():
-        app = App()
-        app.mainloop()
-
-    game_event = threading.Event()
-    response_q = queue.Queue()
-    game_info_q = queue.Queue()
-    run_app()
+    app = App()
+    app.mainloop()
 
 
 if __name__ == "__main__":

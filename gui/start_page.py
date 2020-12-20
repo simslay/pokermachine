@@ -12,12 +12,8 @@ from client.network import Network
 
 
 class StartPage(Frame):
-    def __init__(self, parent, controller, response_q, game_info_q, game_event):
+    def __init__(self, parent, controller):
         Frame.__init__(self, parent)
-
-        self.response_q = response_q
-        self.game_event = game_event
-        self.game_info_q = game_info_q
 
         height = 500
         width = 800
@@ -55,13 +51,6 @@ class StartPage(Frame):
         #     print("not enough players")
         #     return
 
-        chip_entry_list = [100, 1000, 1, 2]
-
-        setup = {
-            "players": player_entry_list,
-            "chips": chip_entry_list
-        }
-
         print("Connect to server")
         n = Network(entry0)
         print("Get player number")
@@ -75,14 +64,6 @@ class StartPage(Frame):
 
             if game.connected():
                 print("Game connected")
-
-                self.game_info_q.put(game)
-
-                self.response_q.put(setup)
-                self.game_event.set()
-
-                controller.destroy()
-                PygamePage(self.game_info_q, self.response_q, self.game_event)
             else:
                 print("Waiting for a new player...")
                 while True:
@@ -91,13 +72,9 @@ class StartPage(Frame):
                         break
 
                 print("Players:", str(game.state.players))
-                self.game_info_q.put(game)
 
-                self.response_q.put(setup)
-                self.game_event.set()
-
-                controller.destroy()
-                PygamePage(self.game_info_q, self.response_q, self.game_event)
+            controller.destroy()
+            PygamePage(n, game, entry0)
         except Exception as e:
-            print("Couldn't get game:", str(e))
+            print("Error:", str(e))
             return

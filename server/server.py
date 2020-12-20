@@ -11,7 +11,7 @@ import pickle
 from game.game import Game
 from game.player.player import Player
 
-server = "192.168.0.11"
+server = "192.168.79.1"
 port = 5555
 idCount = 0
 game = None
@@ -35,13 +35,13 @@ def threaded_client(conn, p):
 
     while True:
         try:
-            print("Waiting...")
+            # print("Waiting...")
             data = conn.recv(4096).decode()
 
             if not data:
                 break
             else:
-                print("Received", data)
+                # print("Received", data)
 
                 if game.connected():
                     pass
@@ -56,15 +56,23 @@ def threaded_client(conn, p):
                         state.players_not_out = state.players
                         state.current_player = state.players[0]
                         state.player_count = len(state.players)
+                        game.init_dealer()
+                        game.init_current_player()
+                        game.ready = True
                         print("Act one")
                         game.act_one()
-                        game.ready = True
                 if data == "get/":
-                    print("Players:", str(game.state.players))
+                    pass
+                    # print("Players:", str(game.state.players))
+                if data.startswith("fold/"):
+                    name = data.split("/")[1]
+                    player = game.get_player(name)
+                    player.fold = True
 
-                print("Send game")
+                # print("Send game")
                 conn.sendall(pickle.dumps(game))
-        except:
+        except Exception as e:
+            print("Error:", str(e))
             break
 
     print("Lost connection")
@@ -83,7 +91,7 @@ while True:
         p = 1
     else:
         print("Create game")
-        game = Game(conn, 100, 1000, 1, 2)
+        game = Game(100, 1000, 1, 2)
         game.init_game()
         # state = game.state
         # state.players.append(Player(name, 100, 1000))

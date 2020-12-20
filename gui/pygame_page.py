@@ -4,7 +4,7 @@ import time
 
 
 class PygamePage:
-    def __init__(self, game_info_q, response_q, game_event):
+    def __init__(self, n, game, player_name):
         print("Initialize game page")
         self.window_width = 800
         self.window_height = 700
@@ -12,16 +12,16 @@ class PygamePage:
         window_height = self.window_height
         font_color = (255, 255, 255)
         font_background = (0, 0, 0)
-        self.game_info_q = game_info_q
-        self.game = game_info_q.get()
+        self.n = n
+        self.game = game
         print("Players:", str(self.game.state.players))
         self.player1 = self.game.state.players[0]
         self.player2 = self.game.state.players[1]
         self.player3 = None
         self.player4 = None
         self.player5 = None
-        self.response_q = response_q
-        self.game_event = game_event
+        self.player_name = player_name
+        self.player = self.player1 if self.player1.name == player_name else self.player2
 
         os.environ['SDL_VIDEO_CENTERED'] = '1'
         pygame.init()
@@ -132,14 +132,18 @@ class PygamePage:
             self.ch5_t_rect = self.ch5_t.get_rect()
             self.ch5_t_rect.x, self.ch5_t_rect.y = window_width-65-691//10, 144+45+50
 
-        red = (200, 0, 0)
-        size = (200, 100)
+        self.rect_border = None
+        self.rect_filled = None
 
-        self.rect_border = pygame.Surface(size)
-        pygame.draw.rect(self.rect_border, red, self.rect_border.get_rect(), 10)
+        if self.game.state.current_player == self.player:
+            red = (200, 0, 0)
+            size = (200, 100)
 
-        self.rect_filled = pygame.Surface(size)
-        pygame.draw.rect(self.rect_filled, red, self.rect_filled.get_rect())
+            self.rect_border = pygame.Surface(size)
+            pygame.draw.rect(self.rect_border, red, self.rect_border.get_rect(), 10)
+
+            self.rect_filled = pygame.Surface(size)
+            pygame.draw.rect(self.rect_filled, red, self.rect_filled.get_rect())
 
         self.fold_button_t = button_font.render("Fold", True, font_color, font_background)
         self.fold_button_t_rect = self.fold_button_t.get_rect()
@@ -169,7 +173,7 @@ class PygamePage:
             screen.blit(self.table_img, self.table_rect)
 
             if game.state.player_count == 2:
-                if game.state.first_player_index == 0:
+                if game.state.dealer_index == 0:
                     screen.blit(self.one_chip_img,
                                 (self.window_width // 2 - 53 // 2 + 30, self.window_height // 2 - 10))
                     screen.blit(self.two_chips_img, (163 + 40, self.window_height // 2 - 30))
@@ -180,11 +184,11 @@ class PygamePage:
                     screen.blit(self.button_img, (163 + 45 - 20, self.window_height // 2 - 40))
 
             if game.state.player_count == 3:
-                if game.state.first_player_index == 0:
+                if game.state.dealer_index == 0:
                     screen.blit(self.one_chip_img, (163 + 45, self.window_height // 2 - 25))
                     screen.blit(self.two_chips_img, (166 + 50, 144 + 50 + 30))
                     screen.blit(self.button_img, (self.window_width // 2 - 53 // 2, self.window_height // 2 - 10))
-                elif game.state.first_player_index == 1:
+                elif game.state.dealer_index == 1:
                     screen.blit(self.one_chip_img, (166 + 50, 144 + 50 + 30))
                     screen.blit(self.two_chips_img, (self.window_width // 2 - 53 // 2, self.window_height // 2 - 10))
                     screen.blit(self.button_img, (163 + 45, self.window_height // 2 - 25))
@@ -194,15 +198,15 @@ class PygamePage:
                     screen.blit(self.button_img, (166 + 50, 144 + 50 + 30))
 
             if game.state.player_count == 4:
-                if game.state.first_player_index == 0:
+                if game.state.dealer_index == 0:
                     screen.blit(self.one_chip_img, (163 + 45, self.window_height // 2 - 25))
                     screen.blit(self.two_chips_img, (166 + 50, 144 + 50 + 30))
                     screen.blit(self.button_img, (self.window_width // 2 - 53 // 2, self.window_height // 2 - 10))
-                elif game.state.first_player_index == 1:
+                elif game.state.dealer_index == 1:
                     screen.blit(self.one_chip_img, (166 + 50, 144 + 50 + 30))
                     screen.blit(self.two_chips_img, (self.window_width // 2 - 53 // 2, 117 + 105))
                     screen.blit(self.button_img, (163 + 45, self.window_height // 2 - 25))
-                elif game.state.first_player_index == 2:
+                elif game.state.dealer_index == 2:
                     screen.blit(self.one_chip_img, (self.window_width // 2 - 53 // 2, 117 + 105))
                     screen.blit(self.two_chips_img, (self.window_width // 2 - 53 // 2, self.window_height // 2 - 10))
                     screen.blit(self.button_img, (166 + 50, 144 + 50 + 30))
@@ -212,42 +216,43 @@ class PygamePage:
                     screen.blit(self.button_img, (self.window_width // 2 - 53 // 2, 117 + 105))
 
             if game.state.player_count == 5:
-                if game.state.first_player_index == 0:
+                if game.state.dealer_index == 0:
                     screen.blit(self.one_chip_img, (163 + 45, self.window_height // 2 - 25))
                     screen.blit(self.two_chips_img, (166 + 50, 144 + 50 + 30))
                     screen.blit(self.button_img, (self.window_width // 2 - 53 // 2, self.window_height // 2 - 10))
-                elif game.state.first_player_index == 1:
+                elif game.state.dealer_index == 1:
                     screen.blit(self.one_chip_img, (166 + 50, 144 + 50 + 30))
                     screen.blit(self.two_chips_img, (self.window_width // 2 - 53 // 2, 117 + 105))
                     screen.blit(self.button_img, (163 + 45, self.window_height // 2 - 25))
-                elif game.state.first_player_index == 2:
+                elif game.state.dealer_index == 2:
                     screen.blit(self.one_chip_img, (self.window_width // 2 - 53 // 2, 117 + 105))
                     screen.blit(self.two_chips_img, (self.window_width - 217 - 35, 144 + 50 + 40))
                     screen.blit(self.button_img, (166 + 50, 144 + 50 + 30))
-                elif game.state.first_player_index == 3:
+                elif game.state.dealer_index == 3:
                     screen.blit(self.one_chip_img, (self.window_width - 217 - 35, 144 + 50 + 40))
                     screen.blit(self.two_chips_img, (self.window_width // 2 - 53 // 2, self.window_height // 2 - 10))
                     screen.blit(self.button_img, (self.window_width // 2 - 53 // 2, 117 + 105))
-                elif game.state.first_player_index == 4:
+                elif game.state.dealer_index == 4:
                     screen.blit(self.one_chip_img, (self.window_width // 2 - 53 // 2, self.window_height // 2 - 10))
                     screen.blit(self.two_chips_img, (163 + 45, self.window_height // 2 - 25))
                     screen.blit(self.button_img, (self.window_width - 217 - 35, 144 + 50 + 40))
 
-            screen.blit(self.rect_filled, (0, self.window_height - 100))
-            screen.blit(self.rect_border, (0, self.window_height - 100))
-            screen.blit(self.fold_button_t, self.fold_button_t_rect)
+            if self.game.state.current_player == self.player:
+                screen.blit(self.rect_filled, (0, self.window_height - 100))
+                screen.blit(self.rect_border, (0, self.window_height - 100))
+                screen.blit(self.fold_button_t, self.fold_button_t_rect)
 
-            # screen.blit(self.rect_filled, (200, self.window_height - 100))
-            # screen.blit(self.rect_border, (200, self.window_height - 100))
-            # screen.blit(self.check_button_t, self.check_button_t_rect)
+                # screen.blit(self.rect_filled, (200, self.window_height - 100))
+                # screen.blit(self.rect_border, (200, self.window_height - 100))
+                # screen.blit(self.check_button_t, self.check_button_t_rect)
 
-            screen.blit(self.rect_filled, (200, self.window_height - 100))
-            screen.blit(self.rect_border, (200, self.window_height - 100))
-            screen.blit(self.call_button_t, self.call_button_t_rect)
+                screen.blit(self.rect_filled, (200, self.window_height - 100))
+                screen.blit(self.rect_border, (200, self.window_height - 100))
+                screen.blit(self.call_button_t, self.call_button_t_rect)
 
-            screen.blit(self.rect_filled, (400, self.window_height - 100))
-            screen.blit(self.rect_border, (400, self.window_height - 100))
-            screen.blit(self.raise_button_t, self.raise_button_t_rect)
+                screen.blit(self.rect_filled, (400, self.window_height - 100))
+                screen.blit(self.rect_border, (400, self.window_height - 100))
+                screen.blit(self.raise_button_t, self.raise_button_t_rect)
 
             screen.blit(self.south_table_cards, (self.window_width // 2 - 53 // 2, self.window_height // 2 + 32))
             screen.blit(self.south_card1, (self.window_width // 2 - 53 // 2, self.window_height // 2 + 32 + 70))
@@ -300,6 +305,7 @@ class PygamePage:
                     x, y = event.pos
                     if 0 < x < 200 and self.window_height > y > self.window_height - 100:
                         print('Clicked on fold')
+                        self.n.send("fold/" + self.player_name)
                     if 200 < x < 400 and self.window_height > y > self.window_height - 100:
                         print('Clicked on call or check')
                     if 400 < x < 600 and self.window_height > y > self.window_height - 100:
@@ -307,10 +313,3 @@ class PygamePage:
             # pygame.display.flip()  # mostly equivalent to pygame.display.update()
             pygame.display.update()
         pygame.quit()
-
-    def action_input(self, entry0):
-        self.response_q.put(entry0)
-        self.game_event.set()
-        time.sleep(0.1)
-        if not self.game_info_q.empty():
-            self.update_screen(self.game_info_q.get())

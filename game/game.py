@@ -14,8 +14,7 @@ class Game(object):
     game_over = None
     state = None
 
-    def __init__(self, conn, starting_chips, starting_stake, small_blind, big_blind):
-        self.conn = conn
+    def __init__(self, starting_chips, starting_stake, small_blind, big_blind):
         self.starting_chips = starting_chips
         self.starting_stake = starting_stake
         self.small_blind = small_blind
@@ -43,33 +42,29 @@ class Game(object):
         state.table.deck.shuffle()
         state.deal_hole()
 
-        self.init_dealer()
-        self.init_current_player()
-
-        # self.ask_players()
+        self.ask_players()
 
         # self.state.pot += self.small_blind + self.big_blind
 
     def ask_players(self):
         state = self.state
+        state.current_player = state.players_not_out[state.current_player_index]
 
         for player in state.players_not_out:
             player.ready = False
 
         while True:
-            player_ready = self.answer(state.players_not_out[state.current_player_index])
-            state.current_player_index += 1
-            state.current_player_index %= len(state.players_not_out)
-            state.current_player = state.players_not_out[state.current_player_index]
-            if player_ready:
-                state.ready_list.append(state.current_player)
-            if len(state.ready_list) == len(state.players_not_out):
+            if state.current_player.fold:
                 break
-
-    def answer(self, player):
-        state = self.state
-
-        return True
+        # while True:
+        #     state.current_player
+        #     if player_ready:
+        #         state.ready_list.append(state.current_player)
+        #     if len(state.ready_list) == len(state.players_not_out):
+        #         break
+        #     state.current_player_index += 1
+        #     state.current_player_index %= len(state.players_not_out)
+        #     state.current_player = state.players_not_out[state.current_player_index]
 
     def init_dealer(self):
         state = self.state
@@ -106,3 +101,9 @@ class Game(object):
             state.small_blind_player.chips -= self.small_blind
             state.big_blind_player.chips -= self.big_blind
             state.big_blind_index = big_blind_index
+
+    def get_player(self, name):
+        for player in self.state.players:
+            if player.name == name:
+                return player
+        return None
