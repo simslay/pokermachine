@@ -11,7 +11,7 @@ import pickle
 from game.game import Game
 from game.player.player import Player
 
-server = "192.168.79.1"
+server = "192.168.0.11"
 port = 5555
 idCount = 0
 game = None
@@ -27,11 +27,11 @@ s.listen()
 print("Server Started. Waiting for a connection")
 
 
-def threaded_client(conn, p):
+def threaded_client(conn):
     print("New client thread started")
     global idCount
-    print("Send", str(p))
-    conn.send(str.encode(str(p)))
+
+    conn.send(str.encode(str("OK")))
 
     while True:
         try:
@@ -43,13 +43,9 @@ def threaded_client(conn, p):
             else:
                 print("Received", data)
 
-                if game.connected():
-                    pass
-
                 if data.startswith("name/"):
                     tab = data.split("/")
                     game.state.players.append(Player(tab[1], 100, 1000))
-                    # print("Players:", str(game.state.players))
 
                     if idCount == 2:
                         state = game.state
@@ -61,16 +57,13 @@ def threaded_client(conn, p):
                         game.ready = True
                         print("Act one")
                         game.act_one()
-                if data == "get/":
-                    pass
-                    # print("Players:", str(game.state.players))
+
                 if data.startswith("fold/"):
                     name = data.split("/")[1]
                     player = game.get_player(name)
                     player.fold = True
                     player.action_done = True
 
-                # print("Send game")
                 conn.sendall(pickle.dumps(game))
         except Exception as e:
             print("Error:", str(e))
@@ -84,20 +77,10 @@ while True:
     print("Connected to:", addr)
 
     idCount += 1
-    p = 0
 
-    if idCount == 2:
-        # state = game.state
-        # state.players.append(Player(name, 100, 1000))
-        p = 1
-    else:
+    if idCount == 1:
         print("Create game")
         game = Game(100, 1000, 1, 2)
         game.init_game()
-        # state = game.state
-        # state.players.append(Player(name, 100, 1000))
-        # state.setup = setup
-        # chips = setup["chips"]
-        # players_name = setup["players"]
 
-    start_new_thread(threaded_client, (conn, p))
+    start_new_thread(threaded_client, (conn,))

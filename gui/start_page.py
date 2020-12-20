@@ -53,28 +53,21 @@ class StartPage(Frame):
 
         print("Connect to server")
         n = Network(entry0)
-        print("Get player number")
-        p = int(n.getP())
-        print("You are player", p)
 
         try:
             print("Receive game")
             game = n.send("name/" + entry0)
             print("Sent name/" + entry0)
 
-            if game.connected():
-                print("Game connected")
-            else:
+            if not game.connected():
                 print("Waiting for a new player...")
                 while True:
                     game = n.send("get/")
                     if game.connected():
                         break
 
-                print("Players:", str(game.state.players))
-
             controller.destroy()
             PygamePage(n, game, entry0)
         except Exception as e:
-            print("Error:", str(e))
+            print("start_page.py --> [EXCEPTION]:", str(e))
             return
