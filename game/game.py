@@ -33,11 +33,8 @@ class Game(object):
         return self.ready
 
     def act_one(self):
-        print("Enter act_one")
         state = self.state
 
-        self.init_dealer()
-        print("Dealer: " + str(state.dealer))
         self.init_blinds()
         state.table.deck.shuffle()
         state.deal_hole()

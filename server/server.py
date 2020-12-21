@@ -53,6 +53,7 @@ def threaded_client(conn):
                         # state.current_player = state.players[0]
                         state.player_count = len(state.players)
                         game.init_dealer()
+                        print("Dealer: " + str(state.dealer))
                         game.init_current_player()
                         game.ready = True
                         print("Act one")
@@ -66,7 +67,7 @@ def threaded_client(conn):
 
                 conn.sendall(pickle.dumps(game))
         except Exception as e:
-            print("Error:", str(e))
+            print("server.py --> [EXCEPTION]:", str(e))
             break
 
     print("Lost connection")
