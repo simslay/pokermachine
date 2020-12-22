@@ -47,10 +47,6 @@ class StartPage(Frame):
 
         player_entry_list = list(player_entry_dict.keys())
 
-        # if len(player_entry_list) < 2:
-        #     print("not enough players")
-        #     return
-
         print("Connect to server")
         n = Network(entry0)
 

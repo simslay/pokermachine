@@ -58,7 +58,7 @@ class PygamePage:
         self.p1_t = font.render(self.player1.name, True, font_color, font_background)
         self.p1_t_rect = self.p1_t.get_rect()
         self.p1_t_rect.x, self.p1_t_rect.y = window_width//2-53//2, window_height//2+32+70-18
-        self.ch1_t = chips_font.render(str(self.player1.chips) + " chips", True, font_color, font_background)
+        self.ch1_t = chips_font.render(str(self.player1.stake) + " chips", True, font_color, font_background)
         self.ch1_t_rect = self.ch1_t.get_rect()
         self.ch1_t_rect.x, self.ch1_t_rect.y = window_width//2-53//2, window_height//2+32+70+1056//10
 
@@ -69,7 +69,7 @@ class PygamePage:
         self.p2_t = font.render(self.player2.name, True, font_color, font_background)
         self.p2_t_rect = self.p2_t.get_rect()
         self.p2_t_rect.x, self.p2_t_rect.y = 40, window_height//2-6-18
-        self.ch2_t = chips_font.render(str(self.player2.chips) + " chips", True, font_color, font_background)
+        self.ch2_t = chips_font.render(str(self.player2.stake) + " chips", True, font_color, font_background)
         self.ch2_t_rect = self.ch2_t.get_rect()
         self.ch2_t_rect.x, self.ch2_t_rect.y = 40, window_height//2-6+1056//10
 
@@ -89,7 +89,7 @@ class PygamePage:
             self.p3_t = font.render(self.player3.name, True, font_color, font_background)
             self.p3_t_rect = self.p3_t.get_rect()
             self.p3_t_rect.x, self.p3_t_rect.y = 40, 144-1056//10+45-18+50
-            self.ch3_t = chips_font.render(str(self.player3.chips) + " chips", True, font_color, font_background)
+            self.ch3_t = chips_font.render(str(self.player3.stake) + " chips", True, font_color, font_background)
             self.ch3_t_rect = self.ch3_t.get_rect()
             self.ch3_t_rect.x, self.ch3_t_rect.y = 40, 144+45+50
 
@@ -109,7 +109,7 @@ class PygamePage:
             self.p4_t = font.render(self.player4.name, True, font_color, font_background)
             self.p4_t_rect = self.p4_t.get_rect()
             self.p4_t_rect.x, self.p4_t_rect.y = window_width//2-53//2, 2
-            self.ch4_t = chips_font.render(str(self.player4.chips) + " chips", True, font_color, font_background)
+            self.ch4_t = chips_font.render(str(self.player4.stake) + " chips", True, font_color, font_background)
             self.ch4_t_rect = self.ch4_t.get_rect()
             self.ch4_t_rect.x, self.ch4_t_rect.y = window_width//2-53//2, 2+1056//10+18
 
@@ -129,7 +129,7 @@ class PygamePage:
             self.p5_t = font.render(self.player5.name, True, font_color, font_background)
             self.p5_t_rect = self.p5_t.get_rect()
             self.p5_t_rect.x, self.p5_t_rect.y = window_width-65-691//10, 144-1056//10+45-18+50
-            self.ch5_t = chips_font.render(str(self.player5.chips) + " chips", True, font_color, font_background)
+            self.ch5_t = chips_font.render(str(self.player5.stake) + " chips", True, font_color, font_background)
             self.ch5_t_rect = self.ch5_t.get_rect()
             self.ch5_t_rect.x, self.ch5_t_rect.y = window_width-65-691//10, 144+45+50
 
@@ -157,6 +157,10 @@ class PygamePage:
         self.call_button_t = button_font.render("Call", True, font_color, font_background)
         self.call_button_t_rect = self.call_button_t.get_rect()
         self.call_button_t_rect.x, self.call_button_t_rect.y = 205+200//2, window_height-100+100//2
+
+        self.bet_button_t = button_font.render("Bet", True, font_color, font_background)
+        self.bet_button_t_rect = self.bet_button_t.get_rect()
+        self.bet_button_t_rect.x, self.bet_button_t_rect.y = 200+220+200//2, window_height-100+100//2
 
         self.raise_button_t = button_font.render("Raise", True, font_color, font_background)
         self.raise_button_t_rect = self.raise_button_t.get_rect()
@@ -240,7 +244,7 @@ class PygamePage:
                     screen.blit(self.two_chips_img, (163 + 45, self.window_height // 2 - 25))
                     screen.blit(self.button_img, (self.window_width - 217 - 35, 144 + 50 + 40))
 
-            if game.state.current_player == player and not player.fold:
+            if game.state.current_player == player and not player.action_done:
                 screen.blit(self.rect_filled, (0, self.window_height - 100))
                 screen.blit(self.rect_border, (0, self.window_height - 100))
                 screen.blit(self.fold_button_t, self.fold_button_t_rect)
@@ -253,6 +257,10 @@ class PygamePage:
                 screen.blit(self.rect_border, (200, self.window_height - 100))
                 screen.blit(self.call_button_t, self.call_button_t_rect)
 
+                # screen.blit(self.rect_filled, (400, self.window_height - 100))
+                # screen.blit(self.rect_border, (400, self.window_height - 100))
+                # screen.blit(self.bet_button_t, self.bet_button_t_rect)
+
                 screen.blit(self.rect_filled, (400, self.window_height - 100))
                 screen.blit(self.rect_border, (400, self.window_height - 100))
                 screen.blit(self.raise_button_t, self.raise_button_t_rect)
@@ -261,8 +269,8 @@ class PygamePage:
             else:
                 self.actions_available = False
 
-            if player.fold:
-                print("You have fold")
+            # if player.action_done:
+            #     print("You've made your action")
 
             screen.blit(self.south_table_cards, (self.window_width // 2 - 53 // 2, self.window_height // 2 + 32))
             screen.blit(self.south_card1, (self.window_width // 2 - 53 // 2, self.window_height // 2 + 32 + 70))
@@ -314,7 +322,7 @@ class PygamePage:
                     if self.actions_available:
                         x, y = event.pos
                         if 0 < x < 200 and self.window_height > y > self.window_height - 100:
-                            game = self.n.send("fold/" + self.player_name)
+                            game = self.n.send("action/fold/" + self.player_name)
                         if 200 < x < 400 and self.window_height > y > self.window_height - 100:
                             print('Clicked on call or check')
                         if 400 < x < 600 and self.window_height > y > self.window_height - 100:

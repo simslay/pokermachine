@@ -49,21 +49,27 @@ def threaded_client(conn):
 
                     if idCount == 2:
                         state = game.state
-                        state.players_not_out = state.players
-                        # state.current_player = state.players[0]
-                        state.player_count = len(state.players)
+                        game.init_players_not_out()
+                        state.player_count = len(state.players_not_out)
                         game.init_dealer()
                         print("Dealer: " + str(state.dealer))
                         game.init_current_player()
+                        print("Current player: " + str(state.current_player))
                         game.ready = True
                         print("Act one")
                         game.act_one()
 
-                if data.startswith("fold/"):
-                    name = data.split("/")[1]
-                    player = game.get_player(name)
-                    player.fold = True
-                    player.action_done = True
+                if data.startswith("action/"):
+                    state = game.state
+
+                    if data.startswith("action/fold/"):
+                        name = data.split("/")[2]
+                        player = game.get_player(name)
+                        player.fold = True
+                        player.action_done = True
+
+                    if len(state.players_not_out) > 1:
+                        game.change_current_player()
 
                 conn.sendall(pickle.dumps(game))
         except Exception as e:
