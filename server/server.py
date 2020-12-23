@@ -41,13 +41,13 @@ def threaded_client(conn):
             if not data:
                 break
             else:
-                print("Received", data)
+                # print("Received", data)
 
                 if data.startswith("name/"):
                     tab = data.split("/")
                     game.state.players.append(Player(tab[1], 100, 1000))
 
-                    if idCount == 2:
+                    if idCount == 2 or game.game_over:
                         state = game.state
                         game.init_players_not_out()
                         state.player_count = len(state.players_not_out)

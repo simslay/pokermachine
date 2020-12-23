@@ -9,7 +9,7 @@ import tkinter as tk
 from tkinter import *
 from gui.pygame_page import PygamePage
 from client.network import Network
-
+import traceback
 
 class StartPage(Frame):
     def __init__(self, parent, controller):
@@ -66,4 +66,5 @@ class StartPage(Frame):
             PygamePage(n, game, entry0)
         except Exception as e:
             print("start_page.py --> [EXCEPTION]:", str(e))
+            traceback.print_exc()
             return

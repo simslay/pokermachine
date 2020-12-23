@@ -136,19 +136,6 @@ class PygamePage:
             self.ch5_t_rect = self.ch5_t.get_rect()
             self.ch5_t_rect.x, self.ch5_t_rect.y = window_width-65-691//10, 144+45+50
 
-        self.rect_border = None
-        self.rect_filled = None
-
-        if self.game.state.current_player == self.player:
-            red = (200, 0, 0)
-            size = (200, 100)
-
-            self.rect_border = pygame.Surface(size)
-            pygame.draw.rect(self.rect_border, red, self.rect_border.get_rect(), 10)
-
-            self.rect_filled = pygame.Surface(size)
-            pygame.draw.rect(self.rect_filled, red, self.rect_filled.get_rect())
-
         self.fold_button_t = button_font.render("Fold", True, font_color, font_background)
         self.fold_button_t_rect = self.fold_button_t.get_rect()
         self.fold_button_t_rect.x, self.fold_button_t_rect.y = 200//2, window_height-100+100//2
@@ -169,17 +156,25 @@ class PygamePage:
         self.raise_button_t_rect = self.raise_button_t.get_rect()
         self.raise_button_t_rect.x, self.raise_button_t_rect.y = 200+180+200//2, window_height-100+100//2
 
-        self.update_screen(self.game)
+        self.rect_border = None
+        self.rect_filled = None
 
-    def update_screen(self, game):
+        self.update_screen()
+
+    def update_screen(self):
         screen = self.screen
-
+        fold_available = False
+        check_available = False
+        call_available = False
+        bet_available = False
+        raise_available = False
         run = True
 
         while run:
             screen.fill((220, 220, 220))
             screen.blit(self.table_img, self.table_rect)
 
+            game = self.n.send("get/")
             player = game.get_player(self.player_name)
 
             if game.state.player_count == 2:
@@ -248,25 +243,41 @@ class PygamePage:
                     screen.blit(self.button_img, (self.window_width - 217 - 35, 144 + 50 + 40))
 
             if game.state.current_player == player and not player.action_done:
+                red = (200, 0, 0)
+                size = (200, 100)
+
+                self.rect_border = pygame.Surface(size)
+                pygame.draw.rect(self.rect_border, red, self.rect_border.get_rect(), 10)
+
+                self.rect_filled = pygame.Surface(size)
+                pygame.draw.rect(self.rect_filled, red, self.rect_filled.get_rect())
+
                 screen.blit(self.rect_filled, (0, self.window_height - 100))
                 screen.blit(self.rect_border, (0, self.window_height - 100))
                 screen.blit(self.fold_button_t, self.fold_button_t_rect)
+                fold_available = True
 
-                # screen.blit(self.rect_filled, (200, self.window_height - 100))
-                # screen.blit(self.rect_border, (200, self.window_height - 100))
-                # screen.blit(self.check_button_t, self.check_button_t_rect)
+                if game.state.current_bet == player.bet:
+                    screen.blit(self.rect_filled, (200, self.window_height - 100))
+                    screen.blit(self.rect_border, (200, self.window_height - 100))
+                    screen.blit(self.check_button_t, self.check_button_t_rect)
+                    check_available = True
+                else:
+                    screen.blit(self.rect_filled, (200, self.window_height - 100))
+                    screen.blit(self.rect_border, (200, self.window_height - 100))
+                    screen.blit(self.call_button_t, self.call_button_t_rect)
+                    call_available = True
 
-                screen.blit(self.rect_filled, (200, self.window_height - 100))
-                screen.blit(self.rect_border, (200, self.window_height - 100))
-                screen.blit(self.call_button_t, self.call_button_t_rect)
-
-                # screen.blit(self.rect_filled, (400, self.window_height - 100))
-                # screen.blit(self.rect_border, (400, self.window_height - 100))
-                # screen.blit(self.bet_button_t, self.bet_button_t_rect)
-
-                screen.blit(self.rect_filled, (400, self.window_height - 100))
-                screen.blit(self.rect_border, (400, self.window_height - 100))
-                screen.blit(self.raise_button_t, self.raise_button_t_rect)
+                if game.state.current_bet == 0:
+                    screen.blit(self.rect_filled, (400, self.window_height - 100))
+                    screen.blit(self.rect_border, (400, self.window_height - 100))
+                    screen.blit(self.bet_button_t, self.bet_button_t_rect)
+                    bet_available = True
+                else:
+                    screen.blit(self.rect_filled, (400, self.window_height - 100))
+                    screen.blit(self.rect_border, (400, self.window_height - 100))
+                    screen.blit(self.raise_button_t, self.raise_button_t_rect)
+                    raise_available = True
 
                 self.actions_available = True
             else:
@@ -330,14 +341,23 @@ class PygamePage:
                     if self.actions_available:
                         x, y = event.pos
                         if 0 < x < 200 and self.window_height > y > self.window_height - 100:
-                            self.n.send("action/fold/" + self.player_name)
+                            if fold_available:
+                                print("Clicked on fold")
+                                self.n.send("action/fold/" + self.player_name)
                         if 200 < x < 400 and self.window_height > y > self.window_height - 100:
-                            print('Clicked on call or check')
-                            self.n.send("action/call/" + self.player_name)
+                            if call_available:
+                                print("Clicked on call")
+                                self.n.send("action/call/" + self.player_name)
+                            elif check_available:
+                                print("Clicked on check")
+                                self.n.send("action/check/" + self.player_name)
                         if 400 < x < 600 and self.window_height > y > self.window_height - 100:
-                            print('Clicked on bet or raise')
-
-            game = self.n.send("get/")
+                            if bet_available:
+                                print('Clicked on bet')
+                                self.n.send("action/bet/" + self.player_name)
+                            elif raise_available:
+                                print('Clicked on raise')
+                                self.n.send("action/raise/" + self.player_name)
             # pygame.display.flip()  # mostly equivalent to pygame.display.update()
             pygame.display.update()
         pygame.quit()
