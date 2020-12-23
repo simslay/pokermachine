@@ -1,6 +1,6 @@
 import os
 import pygame
-import time
+from gui.input_box import InputBox
 
 
 class PygamePage:
@@ -163,6 +163,8 @@ class PygamePage:
 
     def update_screen(self):
         screen = self.screen
+        clock = pygame.time.Clock()
+        raise_input_box = InputBox(600, self.window_height - 50, 50, 32)
         fold_available = False
         check_available = False
         call_available = False
@@ -337,6 +339,9 @@ class PygamePage:
                     run = False
                     pygame.quit()
                     quit()
+
+                raise_input_box.handle_event(event)
+
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.actions_available:
                         x, y = event.pos
@@ -358,6 +363,11 @@ class PygamePage:
                             elif raise_available:
                                 print('Clicked on raise')
                                 self.n.send("action/raise/" + self.player_name)
+
+            raise_input_box.update()
+            raise_input_box.draw(screen)
+
             # pygame.display.flip()  # mostly equivalent to pygame.display.update()
             pygame.display.update()
+            clock.tick(30)
         pygame.quit()
