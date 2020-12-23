@@ -10,13 +10,13 @@ class PygamePage:
         self.window_height = 700
         window_width = self.window_width
         window_height = self.window_height
-        font_color = (255, 255, 255)
-        font_background = (0, 0, 0)
+        self.font_color = (255, 255, 255)
+        self.font_background = (0, 0, 0)
         self.n = n
         self.game = game
         print("Players:", str(self.game.state.players))
-        self.player1 = self.game.state.players[0]
-        self.player2 = self.game.state.players[1]
+        self.player1 = self.game.state.players_not_out[0]
+        self.player2 = self.game.state.players_not_out[1]
         self.player3 = None
         self.player4 = None
         self.player5 = None
@@ -27,8 +27,11 @@ class PygamePage:
         os.environ['SDL_VIDEO_CENTERED'] = '1'
         pygame.init()
 
+        font_color = self.font_color
+        font_background = self.font_background
+
         font = pygame.font.Font(None, 24)
-        chips_font = pygame.font.Font(None, 20)
+        self.chips_font = pygame.font.Font(None, 20)
         button_font = pygame.font.Font(None, 50)
 
         pygame.display.set_caption("Pokermachine")
@@ -58,7 +61,7 @@ class PygamePage:
         self.p1_t = font.render(self.player1.name, True, font_color, font_background)
         self.p1_t_rect = self.p1_t.get_rect()
         self.p1_t_rect.x, self.p1_t_rect.y = window_width//2-53//2, window_height//2+32+70-18
-        self.ch1_t = chips_font.render(str(self.player1.stake) + " chips", True, font_color, font_background)
+        self.ch1_t = self.chips_font.render(str(self.player1.stake) + " chips", True, font_color, font_background)
         self.ch1_t_rect = self.ch1_t.get_rect()
         self.ch1_t_rect.x, self.ch1_t_rect.y = window_width//2-53//2, window_height//2+32+70+1056//10
 
@@ -69,7 +72,7 @@ class PygamePage:
         self.p2_t = font.render(self.player2.name, True, font_color, font_background)
         self.p2_t_rect = self.p2_t.get_rect()
         self.p2_t_rect.x, self.p2_t_rect.y = 40, window_height//2-6-18
-        self.ch2_t = chips_font.render(str(self.player2.stake) + " chips", True, font_color, font_background)
+        self.ch2_t = self.chips_font.render(str(self.player2.stake) + " chips", True, font_color, font_background)
         self.ch2_t_rect = self.ch2_t.get_rect()
         self.ch2_t_rect.x, self.ch2_t_rect.y = 40, window_height//2-6+1056//10
 
@@ -89,7 +92,7 @@ class PygamePage:
             self.p3_t = font.render(self.player3.name, True, font_color, font_background)
             self.p3_t_rect = self.p3_t.get_rect()
             self.p3_t_rect.x, self.p3_t_rect.y = 40, 144-1056//10+45-18+50
-            self.ch3_t = chips_font.render(str(self.player3.stake) + " chips", True, font_color, font_background)
+            self.ch3_t = self.chips_font.render(str(self.player3.stake) + " chips", True, font_color, font_background)
             self.ch3_t_rect = self.ch3_t.get_rect()
             self.ch3_t_rect.x, self.ch3_t_rect.y = 40, 144+45+50
 
@@ -109,7 +112,7 @@ class PygamePage:
             self.p4_t = font.render(self.player4.name, True, font_color, font_background)
             self.p4_t_rect = self.p4_t.get_rect()
             self.p4_t_rect.x, self.p4_t_rect.y = window_width//2-53//2, 2
-            self.ch4_t = chips_font.render(str(self.player4.stake) + " chips", True, font_color, font_background)
+            self.ch4_t = self.chips_font.render(str(self.player4.stake) + " chips", True, font_color, font_background)
             self.ch4_t_rect = self.ch4_t.get_rect()
             self.ch4_t_rect.x, self.ch4_t_rect.y = window_width//2-53//2, 2+1056//10+18
 
@@ -129,7 +132,7 @@ class PygamePage:
             self.p5_t = font.render(self.player5.name, True, font_color, font_background)
             self.p5_t_rect = self.p5_t.get_rect()
             self.p5_t_rect.x, self.p5_t_rect.y = window_width-65-691//10, 144-1056//10+45-18+50
-            self.ch5_t = chips_font.render(str(self.player5.stake) + " chips", True, font_color, font_background)
+            self.ch5_t = self.chips_font.render(str(self.player5.stake) + " chips", True, font_color, font_background)
             self.ch5_t_rect = self.ch5_t.get_rect()
             self.ch5_t_rect.x, self.ch5_t_rect.y = window_width-65-691//10, 144+45+50
 
@@ -272,6 +275,11 @@ class PygamePage:
             # if player.action_done:
             #     print("You've made your action")
 
+            self.ch1_t = self.chips_font.render(
+                str(game.state.players_not_out[0].stake) + " chips", True, self.font_color, self.font_background)
+            self.ch2_t = self.chips_font.render(
+                str(game.state.players_not_out[1].stake) + " chips", True, self.font_color, self.font_background)
+
             screen.blit(self.south_table_cards, (self.window_width // 2 - 53 // 2, self.window_height // 2 + 32))
             screen.blit(self.south_card1, (self.window_width // 2 - 53 // 2, self.window_height // 2 + 32 + 70))
             screen.blit(self.south_card2, (self.window_width // 2, self.window_height // 2 + 32 + 70))
@@ -322,13 +330,14 @@ class PygamePage:
                     if self.actions_available:
                         x, y = event.pos
                         if 0 < x < 200 and self.window_height > y > self.window_height - 100:
-                            game = self.n.send("action/fold/" + self.player_name)
+                            self.n.send("action/fold/" + self.player_name)
                         if 200 < x < 400 and self.window_height > y > self.window_height - 100:
                             print('Clicked on call or check')
-                            game = self.n.send("action/call/" + self.player_name)
+                            self.n.send("action/call/" + self.player_name)
                         if 400 < x < 600 and self.window_height > y > self.window_height - 100:
                             print('Clicked on bet or raise')
 
+            game = self.n.send("get/")
             # pygame.display.flip()  # mostly equivalent to pygame.display.update()
             pygame.display.update()
         pygame.quit()
