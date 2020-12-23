@@ -104,6 +104,9 @@ class Game(object):
             state.big_blind_player.stake -= self.big_blind
             state.big_blind_index = big_blind_index
 
+        state.small_blind_player.bet = self.small_blind
+        state.big_blind_player.bet = self.big_blind
+
         state.current_bet = self.big_blind
 
     def change_current_player(self):

@@ -13,10 +13,12 @@ class Player(object):
         self.chips = chips
         self.cards = []
         self.fold = False
+        self.check = False
+        self.call = False
         self.all_in = False
-        self.ready = False
         self.action_done = False
         self.first_hand = True
+        self.bet = 0
 
     def __repr__(self):
         res = "Player[name=" + self.name + ", fold=" + str(self.fold) + "]"

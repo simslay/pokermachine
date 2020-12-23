@@ -325,6 +325,7 @@ class PygamePage:
                             game = self.n.send("action/fold/" + self.player_name)
                         if 200 < x < 400 and self.window_height > y > self.window_height - 100:
                             print('Clicked on call or check')
+                            game = self.n.send("action/call/" + self.player_name)
                         if 400 < x < 600 and self.window_height > y > self.window_height - 100:
                             print('Clicked on bet or raise')
 
