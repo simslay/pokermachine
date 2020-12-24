@@ -74,6 +74,7 @@ def threaded_client(conn):
                         player = game.get_player(name)
                         player.call = True
                         player.action_done = True
+                        state.pot += state.current_bet - player.bet
                         player.stake -= state.current_bet-player.bet
                         player.bet = state.current_bet
 
@@ -84,6 +85,8 @@ def threaded_client(conn):
                         player = game.get_player(name)
                         player.raised = True
                         player.action_done = True
+                        state.current_bet += amount - player.bet
+                        state.pot += amount
                         player.stake -= amount
                         player.bet += amount
 

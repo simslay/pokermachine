@@ -12,6 +12,7 @@ class PygamePage:
         window_height = self.window_height
         self.font_color = (255, 255, 255)
         self.font_background = (0, 0, 0)
+        self.font = pygame.font.Font(None, 24)
         self.n = n
         self.game = game
         print("Players:", str(self.game.state.players))
@@ -29,8 +30,8 @@ class PygamePage:
 
         font_color = self.font_color
         font_background = self.font_background
+        font = self.font
 
-        font = pygame.font.Font(None, 24)
         self.chips_font = pygame.font.Font(None, 20)
         button_font = pygame.font.Font(None, 50)
 
@@ -53,6 +54,10 @@ class PygamePage:
         self.button_img = pygame.image.load('images/600px-Button.svg.png')
         self.one_chip_img = pygame.image.load('images/600px-1chip.svg.png')
         self.two_chips_img = pygame.image.load('images/600px-2chips.svg.png')
+
+        self.pot_t = font.render("Pot = " + str(game.state.pot), True, font_color, font_background)
+        self.pot_t_rect = self.pot_t.get_rect()
+        self.pot_t_rect.x, self.pot_t_rect.y = window_width//2-30, window_height//2-60
 
         self.south_card1 = pygame.image.load('images/cards/' + str(self.player1.cards[0]) + '.png')
         self.south_card1 = pygame.transform.scale(self.south_card1, (691//10, 1056//10))
@@ -178,6 +183,9 @@ class PygamePage:
 
             game = self.n.send("get/")
             player = game.get_player(self.player_name)
+
+            self.pot_t = self.font.render("Pot = " + str(game.state.pot), True, self.font_color, self.font_background)
+            screen.blit(self.pot_t, self.pot_t_rect)
 
             if game.state.player_count == 2:
                 if game.state.dealer_index == 0:

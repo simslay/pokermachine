@@ -39,8 +39,6 @@ class Game(object):
 
         self.ask_players()
 
-        # self.state.pot += self.small_blind + self.big_blind
-
     def ask_players(self):
         state = self.state
         state.current_player = state.players_not_out[state.current_player_index]
@@ -108,6 +106,8 @@ class Game(object):
         state.big_blind_player.bet = self.big_blind
 
         state.current_bet = self.big_blind
+
+        state.pot += self.small_blind + self.big_blind
 
     def change_current_player(self):
         state = self.state
