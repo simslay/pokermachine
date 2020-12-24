@@ -11,7 +11,7 @@ import pickle
 from game.game import Game
 from game.player.player import Player
 
-server = "192.168.0.11"
+server = "192.168.79.1"
 port = 5555
 idCount = 0
 game = None

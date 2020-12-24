@@ -187,6 +187,14 @@ class PygamePage:
             self.pot_t = self.font.render("Pot = " + str(game.state.pot), True, self.font_color, self.font_background)
             screen.blit(self.pot_t, self.pot_t_rect)
 
+            print("Waiting for other player action...")
+            if game.state.current_player != player:
+                while True:
+                    game = self.n.send("get/")
+                    if game.state.current_player.action_done:
+                        self.actions_available = True
+                        break
+
             if game.state.player_count == 2:
                 if game.state.dealer_index == 0:
                     screen.blit(self.one_chip_img,
