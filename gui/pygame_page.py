@@ -340,7 +340,8 @@ class PygamePage:
                     pygame.quit()
                     quit()
 
-                raise_input_box.handle_event(event)
+                if raise_available:
+                    raise_input_box.handle_event(event)
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.actions_available:
@@ -349,23 +350,29 @@ class PygamePage:
                             if fold_available:
                                 print("Clicked on fold")
                                 self.n.send("action/fold/" + self.player_name)
+                                fold_available = False
                         if 200 < x < 400 and self.window_height > y > self.window_height - 100:
                             if call_available:
                                 print("Clicked on call")
                                 self.n.send("action/call/" + self.player_name)
+                                call_available = False
                             elif check_available:
                                 print("Clicked on check")
                                 self.n.send("action/check/" + self.player_name)
+                                check_available = False
                         if 400 < x < 600 and self.window_height > y > self.window_height - 100:
                             if bet_available:
                                 print('Clicked on bet')
                                 self.n.send("action/bet/" + self.player_name)
+                                bet_available = False
                             elif raise_available:
                                 print('Clicked on raise')
                                 self.n.send("action/raise/" + self.player_name)
+                                raise_available = False
 
-            raise_input_box.update()
-            raise_input_box.draw(screen)
+            if raise_available:
+                raise_input_box.update()
+                raise_input_box.draw(screen)
 
             # pygame.display.flip()  # mostly equivalent to pygame.display.update()
             pygame.display.update()
