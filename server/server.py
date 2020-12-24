@@ -77,6 +77,16 @@ def threaded_client(conn):
                         player.stake -= state.current_bet-player.bet
                         player.bet = state.current_bet
 
+                    if data.startswith("action/raise"):
+                        split_str = data.split("/")
+                        amount = split_str[2]
+                        name = split_str[3]
+                        player = game.get_player(name)
+                        # player.raised = True
+                        # player.action_done = True
+                        # player.stake -= amount
+                        # player.bet += amount
+
                     if len(state.players_not_out) > 1:
                         game.change_current_player()
                     else:

@@ -329,6 +329,11 @@ class PygamePage:
             if len(game.state.players) > 5:
                 screen.blit(self.south_east_table_cards, (self.window_width - 217, self.window_height // 2 - 6))
 
+            if raise_available:
+                raise_input_box.set_text(str(game.state.current_bet * 2 - player.bet))
+                raise_input_box.update()
+                raise_input_box.draw(screen)
+
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
@@ -367,12 +372,8 @@ class PygamePage:
                                 bet_available = False
                             elif raise_available:
                                 print('Clicked on raise')
-                                self.n.send("action/raise/" + self.player_name)
+                                self.n.send("action/raise/" + raise_input_box.text + "/" + self.player_name)
                                 raise_available = False
-
-            if raise_available:
-                raise_input_box.update()
-                raise_input_box.draw(screen)
 
             # pygame.display.flip()  # mostly equivalent to pygame.display.update()
             pygame.display.update()

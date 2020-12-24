@@ -15,6 +15,7 @@ class Player(object):
         self.fold = False
         self.check = False
         self.call = False
+        self.raised = False
         self.all_in = False
         self.action_done = False
         self.first_hand = True
