@@ -175,6 +175,7 @@ class PygamePage:
         call_available = False
         bet_available = False
         raise_available = False
+        raise_error = False
         run = True
 
         while run:
@@ -184,10 +185,10 @@ class PygamePage:
             game = self.n.send("get/")
             player = game.get_player(self.player_name)
 
-            if game.state.current_player != player and player.action_done:
-                game.state.current_player.action_done = False
-            elif game.state.current_player == player:
+            if game.state.current_player == player:  # It's player's turn
                 player.action_done = False
+            else:  # It's not player's turn
+                game.state.current_player.action_done = False
 
             self.pot_t = self.font.render("Pot = " + str(game.state.pot), True, self.font_color, self.font_background)
             screen.blit(self.pot_t, self.pot_t_rect)
@@ -343,10 +344,11 @@ class PygamePage:
             if len(game.state.players) > 5:
                 screen.blit(self.south_east_table_cards, (self.window_width - 217, self.window_height // 2 - 6))
 
-            if raise_available:
+            if raise_available and not raise_error:
                 raise_input_box.set_text(str(game.state.current_bet * 2 - player.bet))
-                raise_input_box.update()
-                raise_input_box.draw(screen)
+
+            raise_input_box.update()
+            raise_input_box.draw(screen)
 
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
@@ -370,26 +372,53 @@ class PygamePage:
                                 print("Clicked on fold")
                                 self.n.send("action/fold/" + self.player_name)
                                 fold_available = False
+                                raise_error = False
                         if 200 < x < 400 and self.window_height > y > self.window_height - 100:
                             if call_available:
                                 print("Clicked on call")
                                 self.n.send("action/call/" + self.player_name)
                                 call_available = False
+                                raise_error = False
                             elif check_available:
                                 print("Clicked on check")
                                 self.n.send("action/check/" + self.player_name)
                                 check_available = False
+                                raise_error = False
                         if 400 < x < 600 and self.window_height > y > self.window_height - 100:
                             if bet_available:
                                 print('Clicked on bet')
                                 self.n.send("action/bet/" + self.player_name)
                                 bet_available = False
+                                raise_error = False
                             elif raise_available:
                                 print('Clicked on raise')
-                                self.n.send("action/raise/" + raise_input_box.text + "/" + self.player_name)
-                                raise_available = False
+                                is_int = is_integer(raise_input_box.text)
+                                if is_int and int(raise_input_box.text) < (game.state.current_bet * 2 - player.bet):
+                                    raise_input_box.set_text("Too small number!")
+                                    raise_error = True
+                                elif is_int and int(raise_input_box.text) < 0:
+                                    raise_input_box.set_text("Not positive!")
+                                    raise_error = True
+                                elif is_int and player.stake >= int(raise_input_box.text):
+                                    self.n.send("action/raise/" + raise_input_box.text + "/" + self.player_name)
+                                    raise_available = False
+                                    raise_error = False
+                                elif not is_int:
+                                    raise_input_box.set_text("Not a number!")
+                                    raise_error = True
+                                else:
+                                    raise_input_box.set_text("Not enough chips!")
+                                    raise_error = True
 
             # pygame.display.flip()  # mostly equivalent to pygame.display.update()
             pygame.display.update()
             clock.tick(30)
         pygame.quit()
+
+
+def is_integer(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
