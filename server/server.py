@@ -69,6 +69,24 @@ def threaded_client(conn):
                         player.action_done = True
                         state.players_not_out.remove(player)
 
+                    if data.startswith("action/check/"):
+                        name = data.split("/")[2]
+                        player = game.get_player(name)
+                        player.check = True
+                        player.action_done = True
+
+                    if data.startswith("action/bet/"):
+                        split_str = data.split("/")
+                        amount = split_str[2]
+                        name = split_str[3]
+                        player = game.get_player(name)
+                        player.bet_bool = True
+                        player.action_done = True
+                        state.current_bet = amount
+                        state.pot += amount
+                        player.stake -= amount
+                        player.bet = amount
+
                     if data.startswith("action/call"):
                         name = data.split("/")[2]
                         player = game.get_player(name)
@@ -94,8 +112,6 @@ def threaded_client(conn):
                         game.change_current_player()
                     else:
                         game.game_over = True
-
-                    print("current player:", game.state.current_player.name)
 
                 conn.sendall(pickle.dumps(game))
         except Exception as e:

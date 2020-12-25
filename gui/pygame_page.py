@@ -184,6 +184,11 @@ class PygamePage:
             game = self.n.send("get/")
             player = game.get_player(self.player_name)
 
+            if game.state.current_player != player and player.action_done:
+                game.state.current_player.action_done = False
+            elif game.state.current_player == player:
+                player.action_done = False
+
             self.pot_t = self.font.render("Pot = " + str(game.state.pot), True, self.font_color, self.font_background)
             screen.blit(self.pot_t, self.pot_t_rect)
 

@@ -14,6 +14,7 @@ class Player(object):
         self.cards = []
         self.fold = False
         self.check = False
+        self.bet_bool = False
         self.call = False
         self.raised = False
         self.all_in = False
