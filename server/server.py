@@ -74,7 +74,7 @@ def threaded_client(conn):
                         player = game.get_player(name)
                         player.call = True
                         player.action_done = True
-                        state.pot += state.current_bet - player.bet
+                        state.pot += state.current_bet-player.bet
                         player.stake -= state.current_bet-player.bet
                         player.bet = state.current_bet
 
@@ -94,6 +94,8 @@ def threaded_client(conn):
                         game.change_current_player()
                     else:
                         game.game_over = True
+
+                    print("current player:", game.state.current_player.name)
 
                 conn.sendall(pickle.dumps(game))
         except Exception as e:
