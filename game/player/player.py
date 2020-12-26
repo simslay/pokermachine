@@ -20,6 +20,7 @@ class Player(object):
         self.all_in = False
         self.action_done = False
         self.first_hand = True
+        # Current bet
         self.bet = 0
 
     def __repr__(self):

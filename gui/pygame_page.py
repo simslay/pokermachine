@@ -349,7 +349,7 @@ class PygamePage:
 
             if raise_available and not raise_error:
                 if raise_init:
-                    raise_input_box.set_text(str(game.state.current_bet * 2 - game.state.current_player.bet))
+                    raise_input_box.set_text(str(game.state.current_bet * 2))  # - game.state.current_player.bet
                     raise_init = False
                 raise_input_box.update()
                 raise_input_box.draw(screen)

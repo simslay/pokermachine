@@ -103,10 +103,10 @@ def threaded_client(conn):
                         player = game.get_player(name)
                         player.raised = True
                         player.action_done = True
-                        state.current_bet += amount - player.bet
+                        state.current_bet = amount  # - player.bet
                         state.pot += amount
                         player.stake -= amount
-                        player.bet += amount
+                        player.bet = amount
 
                     if len(state.players_not_out) > 1:
                         game.change_current_player()
