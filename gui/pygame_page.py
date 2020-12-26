@@ -176,6 +176,7 @@ class PygamePage:
         bet_available = False
         raise_available = False
         raise_error = False
+        raise_init = True
         run = True
 
         while run:
@@ -295,6 +296,8 @@ class PygamePage:
                     screen.blit(self.rect_border, (400, self.window_height - 100))
                     screen.blit(self.raise_button_t, self.raise_button_t_rect)
                     raise_available = True
+                    if game.state.current_player != player and game.state.current_player.action_done:
+                        raise_init = True
 
                 self.actions_available = True
             else:
@@ -345,10 +348,14 @@ class PygamePage:
                 screen.blit(self.south_east_table_cards, (self.window_width - 217, self.window_height // 2 - 6))
 
             if raise_available and not raise_error:
-                raise_input_box.set_text(str(game.state.current_bet * 2 - player.bet))
-
-            raise_input_box.update()
-            raise_input_box.draw(screen)
+                if raise_init:
+                    raise_input_box.set_text(str(game.state.current_bet * 2 - game.state.current_player.bet))
+                    raise_init = False
+                raise_input_box.update()
+                raise_input_box.draw(screen)
+            elif raise_available:
+                raise_input_box.update()
+                raise_input_box.draw(screen)
 
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
