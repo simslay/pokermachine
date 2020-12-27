@@ -15,7 +15,6 @@ server = "192.168.79.1"
 port = 5555
 idCount = 0
 game = None
-
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 try:
@@ -30,32 +29,31 @@ print("Server Started. Waiting for a connection")
 def threaded_client(conn):
     print("New client thread started")
     global idCount
+    global game
 
     conn.send(str.encode(str("OK")))
 
     while True:
         try:
-            # print("Waiting...")
             data = conn.recv(4096).decode()
 
             if not data:
                 break
             else:
                 if data == "init/":
-                    if game.game_over:
-                        init_game(game)
-                        print("Act one")
+                    if game.game_over or not game.init:
+                        game.init_game()
+                        init_game()
+                        print("Act one (init/)")
                         game.act_one()
-                        game.game_over = False
-                        game.init = True
 
                 if data.startswith("name/"):
                     tab = data.split("/")
                     game.state.players.append(Player(tab[1], 100, 1000))
 
                     if idCount == 2:
-                        init_game(game)
-                        print("Act one")
+                        init_game()
+                        print("Act one (name/)")
                         game.act_one()
 
                 if data.startswith("action/"):
@@ -121,7 +119,9 @@ def threaded_client(conn):
     print("Lost connection")
 
 
-def init_game(game):
+def init_game():
+    global game
+
     state = game.state
     game.init_players_not_out()
     state.player_count = len(state.players_not_out)
@@ -130,6 +130,8 @@ def init_game(game):
     game.init_current_player()
     print("Current player: " + str(state.current_player))
     game.ready = True
+    game.game_over = False
+    game.init = True
 
 
 while True:

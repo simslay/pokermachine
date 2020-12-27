@@ -202,24 +202,27 @@ class PygamePage:
         raise_available = False
         raise_error = False
         run = True
+        loop_count = 0
 
         while run:
+            loop_count += 1
+
             screen.fill((220, 220, 220))
             screen.blit(self.table_img, self.table_rect)
 
-            game = self.n.send("get/")
+            self.game = self.n.send("get/")
+            game = self.game
             player = game.get_player(self.player_name)
 
-            if game.game_over or not game.init:
-                print("Initialize game")
+            if game.game_over or not game.init or loop_count == 1:
                 self.game = self.n.send("init/")
                 game = self.game
                 self.init_game()
 
-            if game.state.current_player == player:  # It's player's turn
-                player.action_done = False
-            else:  # It's not player's turn
-                game.state.current_player.action_done = False
+            # if game.state.current_player == player:  # It's player's turn
+            #     player.action_done = False
+            # else:  # It's not player's turn
+            #     game.state.current_player.action_done = False
 
             self.pot_t = self.font.render("Pot = " + str(game.state.pot), True, self.font_color, self.font_background)
             screen.blit(self.pot_t, self.pot_t_rect)
