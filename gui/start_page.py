@@ -11,6 +11,7 @@ from gui.pygame_page import PygamePage
 from client.network import Network
 import traceback
 
+
 class StartPage(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)

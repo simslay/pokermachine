@@ -10,6 +10,7 @@ from _thread import *
 import pickle
 from game.game import Game
 from game.player.player import Player
+import traceback
 
 server = "192.168.79.1"
 port = 5555
@@ -42,9 +43,11 @@ def threaded_client(conn):
             else:
                 if data == "init/":
                     if game.game_over or not game.init:
+                        players = game.state.players
                         game.init_game()
+                        game.state.players = players
                         init_game()
-                        print("Act one (init/)")
+                        print("Next act one")
                         game.act_one()
 
                 if data.startswith("name/"):
@@ -53,7 +56,7 @@ def threaded_client(conn):
 
                     if idCount == 2:
                         init_game()
-                        print("Act one (name/)")
+                        print("First act one")
                         game.act_one()
 
                 if data.startswith("action/"):
@@ -114,6 +117,7 @@ def threaded_client(conn):
                 conn.sendall(pickle.dumps(game))
         except Exception as e:
             print("server.py --> [EXCEPTION]:", str(e))
+            traceback.print_exc()
             break
 
     print("Lost connection")
@@ -121,6 +125,8 @@ def threaded_client(conn):
 
 def init_game():
     global game
+
+    print("init_game()")
 
     state = game.state
     game.init_players_not_out()
