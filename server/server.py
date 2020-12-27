@@ -41,21 +41,20 @@ def threaded_client(conn):
             if not data:
                 break
             else:
-                # print("Received", data)
+                if data == "init/":
+                    if game.game_over:
+                        init_game(game)
+                        print("Act one")
+                        game.act_one()
+                        game.game_over = False
+                        game.init = True
 
                 if data.startswith("name/"):
                     tab = data.split("/")
                     game.state.players.append(Player(tab[1], 100, 1000))
 
-                    if idCount == 2 or game.game_over:
-                        state = game.state
-                        game.init_players_not_out()
-                        state.player_count = len(state.players_not_out)
-                        game.init_dealer()
-                        print("Dealer: " + str(state.dealer))
-                        game.init_current_player()
-                        print("Current player: " + str(state.current_player))
-                        game.ready = True
+                    if idCount == 2:
+                        init_game(game)
                         print("Act one")
                         game.act_one()
 
@@ -120,6 +119,17 @@ def threaded_client(conn):
             break
 
     print("Lost connection")
+
+
+def init_game(game):
+    state = game.state
+    game.init_players_not_out()
+    state.player_count = len(state.players_not_out)
+    game.init_dealer()
+    print("Dealer: " + str(state.dealer))
+    game.init_current_player()
+    print("Current player: " + str(state.current_player))
+    game.ready = True
 
 
 while True:

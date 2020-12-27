@@ -7,7 +7,6 @@ Created on Mon Dec 07 17:20:00 2020
 
 from random import randrange
 from game.state import State
-from game.player.player import Player
 
 
 class Game(object):
@@ -21,6 +20,7 @@ class Game(object):
         self.big_blind = big_blind
         self.buy_in = starting_stake
         self.ready = False
+        self.init = False
 
     def init_game(self):
         self.game_over = False
@@ -36,28 +36,6 @@ class Game(object):
         self.init_blinds()
         state.table.deck.shuffle()
         state.deal_hole()
-
-        self.ask_players()
-
-    def ask_players(self):
-        state = self.state
-        state.current_player = state.players_not_out[state.current_player_index]
-
-        for player in state.players_not_out:
-            player.action_done = False
-
-        # while True:
-        #     if state.current_player.action_done:
-        #         break
-        # while True:
-        #     state.current_player
-        #     if player_ready:
-        #         state.ready_list.append(state.current_player)
-        #     if len(state.ready_list) == len(state.players_not_out):
-        #         break
-        #     state.current_player_index += 1
-        #     state.current_player_index %= len(state.players_not_out)
-        #     state.current_player = state.players_not_out[state.current_player_index]
 
     def init_players_not_out(self):
         state = self.state

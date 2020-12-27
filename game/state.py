@@ -30,14 +30,6 @@ class State:
         self.pot = 0
         self.current_bet = 0
 
-    def deal_flop(self):
-        deck = self.table.deck
-
-        deck.burn()
-        deck.deal(self.table, 3)
-
-        self.flop_dealt = True
-
     def display_players(self):
         for player in self.players:
             print(player)
@@ -69,6 +61,14 @@ class State:
     def deal_hole(self):
         for player in self.players_not_out:
             self.table.deck.deal(player, 2)
+
+    def deal_flop(self):
+        deck = self.table.deck
+
+        deck.burn()
+        deck.deal(self.table, 3)
+
+        self.flop_dealt = True
 
     def end_round(self):
         pass

@@ -28,12 +28,8 @@ class PygamePage:
         os.environ['SDL_VIDEO_CENTERED'] = '1'
         pygame.init()
 
-        font_color = self.font_color
-        font_background = self.font_background
-        font = self.font
-
         self.chips_font = pygame.font.Font(None, 20)
-        button_font = pygame.font.Font(None, 50)
+        self.button_font = pygame.font.Font(None, 50)
 
         pygame.display.set_caption("Pokermachine")
         # clock = pygame.time.Clock()
@@ -55,38 +51,82 @@ class PygamePage:
         self.one_chip_img = pygame.image.load('images/600px-1chip.svg.png')
         self.two_chips_img = pygame.image.load('images/600px-2chips.svg.png')
 
-        self.pot_t = font.render("Pot = " + str(game.state.pot), True, font_color, font_background)
-        self.pot_t_rect = self.pot_t.get_rect()
-        self.pot_t_rect.x, self.pot_t_rect.y = window_width//2-30, window_height//2-60
-
-        self.south_card1 = pygame.image.load('images/cards/' + str(self.player1.cards[0]) + '.png')
-        self.south_card1 = pygame.transform.scale(self.south_card1, (691//10, 1056//10))
-        self.south_card2 = pygame.image.load('images/cards/' + str(self.player1.cards[1]) + '.png')
-        self.south_card2 = pygame.transform.scale(self.south_card2, (691 // 10, 1056 // 10))
-        self.p1_t = font.render(self.player1.name, True, font_color, font_background)
-        self.p1_t_rect = self.p1_t.get_rect()
-        self.p1_t_rect.x, self.p1_t_rect.y = window_width//2-53//2, window_height//2+32+70-18
-        self.ch1_t = self.chips_font.render(str(self.player1.stake) + " chips", True, font_color, font_background)
-        self.ch1_t_rect = self.ch1_t.get_rect()
-        self.ch1_t_rect.x, self.ch1_t_rect.y = window_width//2-53//2, window_height//2+32+70+1056//10
-
-        self.south_west_card1 = pygame.image.load('images/cards/' + str(self.player2.cards[0]) + '.png')
-        self.south_west_card1 = pygame.transform.scale(self.south_west_card1, (691 // 10, 1056 // 10))
-        self.south_west_card2 = pygame.image.load('images/cards/' + str(self.player2.cards[1]) + '.png')
-        self.south_west_card2 = pygame.transform.scale(self.south_west_card2, (691 // 10, 1056 // 10))
-        self.p2_t = font.render(self.player2.name, True, font_color, font_background)
-        self.p2_t_rect = self.p2_t.get_rect()
-        self.p2_t_rect.x, self.p2_t_rect.y = 40, window_height//2-6-18
-        self.ch2_t = self.chips_font.render(str(self.player2.stake) + " chips", True, font_color, font_background)
-        self.ch2_t_rect = self.ch2_t.get_rect()
-        self.ch2_t_rect.x, self.ch2_t_rect.y = 40, window_height//2-6+1056//10
-
+        self.pot_t = None
+        self.pot_t_rect = None
+        self.south_card1 = None
+        self.south_card2 = None
+        self.p1_t = None
+        self.p1_t_rect = None
+        self.ch1_t = None
+        self.ch1_t_rect = None
+        self.south_west_card1 = None
+        self.south_west_card2 = None
+        self.p2_t = None
+        self.p2_t_rect = None
+        self.ch2_t = None
+        self.ch2_t_rect = None
         self.north_west_card1 = None
         self.north_west_card2 = None
         self.p3_t = None
         self.p3_t_rect = None
         self.ch3_t = None
         self.ch3_t_rect = None
+        self.north_card1 = None
+        self.north_card2 = None
+        self.p4_t = None
+        self.p4_t_rect = None
+        self.ch4_t = None
+        self.ch4_t_rect = None
+        self.north_east_card1 = None
+        self.north_east_card2 = None
+        self.p5_t = None
+        self.p5_t_rect = None
+        self.ch5_t = None
+        self.ch5_t_rect = None
+        self.fold_button_t = None
+        self.fold_button_t_rect = None
+        self.check_button_t = None
+        self.check_button_t_rect = None
+        self.call_button_t = None
+        self.call_button_t_rect = None
+        self.bet_button_t = None
+        self.bet_button_t_rect = None
+        self.raise_button_t = None
+        self.raise_button_t_rect = None
+        self.rect_border = None
+        self.rect_filled = None
+
+        self.update_screen()
+
+    def init_game(self):
+        self.pot_t = self.font.render("Pot = " + str(self.game.state.pot), True, self.font_color, self.font_background)
+        self.pot_t_rect = self.pot_t.get_rect()
+        self.pot_t_rect.x, self.pot_t_rect.y = self.window_width // 2 - 30, self.window_height // 2 - 60
+
+        self.south_card1 = pygame.image.load('images/cards/' + str(self.player1.cards[0]) + '.png')
+        self.south_card1 = pygame.transform.scale(self.south_card1, (691 // 10, 1056 // 10))
+        self.south_card2 = pygame.image.load('images/cards/' + str(self.player1.cards[1]) + '.png')
+        self.south_card2 = pygame.transform.scale(self.south_card2, (691 // 10, 1056 // 10))
+        self.p1_t = self.font.render(self.player1.name, True, self.font_color, self.font_background)
+        self.p1_t_rect = self.p1_t.get_rect()
+        self.p1_t_rect.x, self.p1_t_rect.y = self.window_width // 2 - 53 // 2, self.window_height // 2 + 32 + 70 - 18
+        self.ch1_t =\
+            self.chips_font.render(str(self.player1.stake) + " chips", True, self.font_color, self.font_background)
+        self.ch1_t_rect = self.ch1_t.get_rect()
+        self.ch1_t_rect.x, self.ch1_t_rect.y =\
+            self.window_width // 2 - 53 // 2, self.window_height // 2 + 32 + 70 + 1056 // 10
+
+        self.south_west_card1 = pygame.image.load('images/cards/' + str(self.player2.cards[0]) + '.png')
+        self.south_west_card1 = pygame.transform.scale(self.south_west_card1, (691 // 10, 1056 // 10))
+        self.south_west_card2 = pygame.image.load('images/cards/' + str(self.player2.cards[1]) + '.png')
+        self.south_west_card2 = pygame.transform.scale(self.south_west_card2, (691 // 10, 1056 // 10))
+        self.p2_t = self.font.render(self.player2.name, True, self.font_color, self.font_background)
+        self.p2_t_rect = self.p2_t.get_rect()
+        self.p2_t_rect.x, self.p2_t_rect.y = 40, self.window_height // 2 - 6 - 18
+        self.ch2_t =\
+            self.chips_font.render(str(self.player2.stake) + " chips", True, self.font_color, self.font_background)
+        self.ch2_t_rect = self.ch2_t.get_rect()
+        self.ch2_t_rect.x, self.ch2_t_rect.y = 40, self.window_height // 2 - 6 + 1056 // 10
 
         if len(self.game.state.players) > 2:
             self.player3 = self.game.state.players[2]
@@ -94,19 +134,13 @@ class PygamePage:
             self.north_west_card1 = pygame.transform.scale(self.north_west_card1, (691 // 10, 1056 // 10))
             self.north_west_card2 = pygame.image.load('images/cards/' + str(self.player3.cards[1]) + '.png')
             self.north_west_card2 = pygame.transform.scale(self.north_west_card2, (691 // 10, 1056 // 10))
-            self.p3_t = font.render(self.player3.name, True, font_color, font_background)
+            self.p3_t = self.font.render(self.player3.name, True, self.font_color, self.font_background)
             self.p3_t_rect = self.p3_t.get_rect()
-            self.p3_t_rect.x, self.p3_t_rect.y = 40, 144-1056//10+45-18+50
-            self.ch3_t = self.chips_font.render(str(self.player3.stake) + " chips", True, font_color, font_background)
+            self.p3_t_rect.x, self.p3_t_rect.y = 40, 144 - 1056 // 10 + 45 - 18 + 50
+            self.ch3_t =\
+                self.chips_font.render(str(self.player3.stake) + " chips", True, self.font_color, self.font_background)
             self.ch3_t_rect = self.ch3_t.get_rect()
-            self.ch3_t_rect.x, self.ch3_t_rect.y = 40, 144+45+50
-
-        self.north_card1 = None
-        self.north_card2 = None
-        self.p4_t = None
-        self.p4_t_rect = None
-        self.ch4_t = None
-        self.ch4_t_rect = None
+            self.ch3_t_rect.x, self.ch3_t_rect.y = 40, 144 + 45 + 50
 
         if len(self.game.state.players) > 3:
             self.player4 = self.game.state.players[3]
@@ -114,19 +148,13 @@ class PygamePage:
             self.north_card1 = pygame.transform.scale(self.north_card1, (691 // 10, 1056 // 10))
             self.north_card2 = pygame.image.load('images/cards/' + str(self.player4.cards[1]) + '.png')
             self.north_card2 = pygame.transform.scale(self.north_card2, (691 // 10, 1056 // 10))
-            self.p4_t = font.render(self.player4.name, True, font_color, font_background)
+            self.p4_t = self.font.render(self.player4.name, True, self.font_color, self.font_background)
             self.p4_t_rect = self.p4_t.get_rect()
-            self.p4_t_rect.x, self.p4_t_rect.y = window_width//2-53//2, 2
-            self.ch4_t = self.chips_font.render(str(self.player4.stake) + " chips", True, font_color, font_background)
+            self.p4_t_rect.x, self.p4_t_rect.y = self.window_width // 2 - 53 // 2, 2
+            self.ch4_t =\
+                self.chips_font.render(str(self.player4.stake) + " chips", True, self.font_color, self.font_background)
             self.ch4_t_rect = self.ch4_t.get_rect()
-            self.ch4_t_rect.x, self.ch4_t_rect.y = window_width//2-53//2, 2+1056//10+18
-
-        self.north_east_card1 = None
-        self.north_east_card2 = None
-        self.p5_t = None
-        self.p5_t_rect = None
-        self.ch5_t = None
-        self.ch5_t_rect = None
+            self.ch4_t_rect.x, self.ch4_t_rect.y = self.window_width // 2 - 53 // 2, 2 + 1056 // 10 + 18
 
         if len(self.game.state.players) > 4:
             self.player5 = self.game.state.players[4]
@@ -134,37 +162,34 @@ class PygamePage:
             self.north_east_card1 = pygame.transform.scale(self.north_east_card1, (691 // 10, 1056 // 10))
             self.north_east_card2 = pygame.image.load('images/cards/' + str(self.player5.cards[1]) + '.png')
             self.north_east_card2 = pygame.transform.scale(self.north_east_card2, (691 // 10, 1056 // 10))
-            self.p5_t = font.render(self.player5.name, True, font_color, font_background)
+            self.p5_t = self.font.render(self.player5.name, True, self.font_color, self.font_background)
             self.p5_t_rect = self.p5_t.get_rect()
-            self.p5_t_rect.x, self.p5_t_rect.y = window_width-65-691//10, 144-1056//10+45-18+50
-            self.ch5_t = self.chips_font.render(str(self.player5.stake) + " chips", True, font_color, font_background)
+            self.p5_t_rect.x, self.p5_t_rect.y = self.window_width - 65 - 691 // 10, 144 - 1056 // 10 + 45 - 18 + 50
+            self.ch5_t =\
+                self.chips_font.render(str(self.player5.stake) + " chips", True, self.font_color, self.font_background)
             self.ch5_t_rect = self.ch5_t.get_rect()
-            self.ch5_t_rect.x, self.ch5_t_rect.y = window_width-65-691//10, 144+45+50
+            self.ch5_t_rect.x, self.ch5_t_rect.y = self.window_width - 65 - 691 // 10, 144 + 45 + 50
 
-        self.fold_button_t = button_font.render("Fold", True, font_color, font_background)
+        self.fold_button_t = self.button_font.render("Fold", True, self.font_color, self.font_background)
         self.fold_button_t_rect = self.fold_button_t.get_rect()
-        self.fold_button_t_rect.x, self.fold_button_t_rect.y = 200//2, window_height-100+100//2
+        self.fold_button_t_rect.x, self.fold_button_t_rect.y = 200 // 2, self.window_height - 100 + 100 // 2
 
-        self.check_button_t = button_font.render("Check", True, font_color, font_background)
+        self.check_button_t = self.button_font.render("Check", True, self.font_color, self.font_background)
         self.check_button_t_rect = self.check_button_t.get_rect()
-        self.check_button_t_rect.x, self.check_button_t_rect.y = 170+200//2, window_height-100+100//2
+        self.check_button_t_rect.x, self.check_button_t_rect.y = 170 + 200 // 2, self.window_height - 100 + 100 // 2
 
-        self.call_button_t = button_font.render("Call", True, font_color, font_background)
+        self.call_button_t = self.button_font.render("Call", True, self.font_color, self.font_background)
         self.call_button_t_rect = self.call_button_t.get_rect()
-        self.call_button_t_rect.x, self.call_button_t_rect.y = 205+200//2, window_height-100+100//2
+        self.call_button_t_rect.x, self.call_button_t_rect.y = 205 + 200 // 2, self.window_height - 100 + 100 // 2
 
-        self.bet_button_t = button_font.render("Bet", True, font_color, font_background)
+        self.bet_button_t = self.button_font.render("Bet", True, self.font_color, self.font_background)
         self.bet_button_t_rect = self.bet_button_t.get_rect()
-        self.bet_button_t_rect.x, self.bet_button_t_rect.y = 200+220+200//2, window_height-100+100//2
+        self.bet_button_t_rect.x, self.bet_button_t_rect.y = 200 + 220 + 200 // 2, self.window_height - 100 + 100 // 2
 
-        self.raise_button_t = button_font.render("Raise", True, font_color, font_background)
+        self.raise_button_t = self.button_font.render("Raise", True, self.font_color, self.font_background)
         self.raise_button_t_rect = self.raise_button_t.get_rect()
-        self.raise_button_t_rect.x, self.raise_button_t_rect.y = 200+180+200//2, window_height-100+100//2
-
-        self.rect_border = None
-        self.rect_filled = None
-
-        self.update_screen()
+        self.raise_button_t_rect.x, self.raise_button_t_rect.y =\
+            200 + 180 + 200 // 2, self.window_height - 100 + 100 // 2
 
     def update_screen(self):
         screen = self.screen
@@ -184,6 +209,12 @@ class PygamePage:
 
             game = self.n.send("get/")
             player = game.get_player(self.player_name)
+
+            if game.game_over or not game.init:
+                print("Initialize game")
+                self.game = self.n.send("init/")
+                game = self.game
+                self.init_game()
 
             if game.state.current_player == player:  # It's player's turn
                 player.action_done = False
@@ -300,9 +331,6 @@ class PygamePage:
             else:
                 self.actions_available = False
 
-            # if player.action_done:
-            #     print("You've made your action")
-
             self.ch1_t = self.chips_font.render(
                 str(game.state.players_not_out[0].stake) + " chips", True, self.font_color, self.font_background)
             self.ch2_t = self.chips_font.render(
@@ -347,7 +375,6 @@ class PygamePage:
             if raise_available and not raise_error:
                 if game.ready:
                     raise_input_box.set_text(str(game.state.current_bet * 2))
-                    game.ready = False
                 raise_input_box.update()
                 raise_input_box.draw(screen)
             elif raise_available:
