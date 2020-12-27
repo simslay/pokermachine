@@ -212,12 +212,13 @@ class PygamePage:
 
             self.game = self.n.send("get/")
             game = self.game
-            player = game.get_player(self.player_name)
 
             if game.game_over or not game.init or loop_count == 1:
                 self.game = self.n.send("init/")
                 game = self.game
                 self.init_game()
+
+            player = game.get_player(self.player_name)
 
             # if game.state.current_player == player:  # It's player's turn
             #     player.action_done = False

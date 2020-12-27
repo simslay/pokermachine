@@ -40,6 +40,8 @@ class Game(object):
     def init_players_not_out(self):
         state = self.state
 
+        state.players_not_out = []
+
         for player in state.players:
             if player.stake >= 0 or player.first_hand and player.stake == self.buy_in:
                 state.players_not_out.append(player)
