@@ -44,6 +44,7 @@ class Game(object):
 
         for player in state.players:
             if player.stake >= 0 or player.first_hand and player.stake == self.buy_in:
+                player.cards = []
                 state.players_not_out.append(player)
 
     def init_dealer(self):

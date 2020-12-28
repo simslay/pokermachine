@@ -16,8 +16,8 @@ class PygamePage:
         self.n = n
         self.game = game
         print("Players:", str(self.game.state.players))
-        self.player1 = self.game.state.players_not_out[0]
-        self.player2 = self.game.state.players_not_out[1]
+        self.player1 = None
+        self.player2 = None
         self.player3 = None
         self.player4 = None
         self.player5 = None
@@ -99,6 +99,9 @@ class PygamePage:
         self.update_screen()
 
     def init_game(self):
+        self.player1 = self.game.state.players_not_out[0]
+        self.player2 = self.game.state.players_not_out[1]
+
         self.pot_t = self.font.render("Pot = " + str(self.game.state.pot), True, self.font_color, self.font_background)
         self.pot_t_rect = self.pot_t.get_rect()
         self.pot_t_rect.x, self.pot_t_rect.y = self.window_width // 2 - 30, self.window_height // 2 - 60
