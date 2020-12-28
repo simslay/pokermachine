@@ -41,9 +41,11 @@ def threaded_client(conn):
             if not data:
                 break
             else:
-                if data == "init/":
+                if data == "nextgame/":
                     if game.game_over or not game.init:
                         players = game.state.players
+                        for player in players:
+                            player.first_hand = False
                         game.init_game()
                         game.state.players = players
                         init_game()
