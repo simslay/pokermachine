@@ -41,17 +41,6 @@ def threaded_client(conn):
             if not data:
                 break
             else:
-                if data == "init/":
-                    if game.game_over or not game.init:
-                        players = game.state.players
-                        for player in players:
-                            player.first_hand = False
-                        game.init_game()
-                        game.state.players = players
-                        init_game()
-                        print("Next act one")
-                        game.act_one()
-
                 if data.startswith("name/"):
                     tab = data.split("/")
                     game.state.players.append(Player(tab[1], 100, 1000))
@@ -116,6 +105,16 @@ def threaded_client(conn):
                     else:
                         game.game_over = True
 
+                    if game.game_over or not game.init:
+                        players = game.state.players
+                        for player in players:
+                            player.first_hand = False
+                        game.init_game()
+                        game.state.players = players
+                        init_game()
+                        print("Next act one")
+                        game.act_one()
+
                 conn.sendall(pickle.dumps(game))
         except Exception as e:
             print("server.py --> [EXCEPTION]:", str(e))
@@ -143,7 +142,6 @@ def init_game():
     game.ready = True
     game.game_over = False
     game.init = True
-    game.n_init += 1
 
 
 while True:
