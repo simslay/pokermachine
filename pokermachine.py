@@ -58,7 +58,7 @@ def main():
 
         def show_frame(self, context):
             frame = self.frames[context]
-            print("waiting")
+            print("Waiting")
             if not self.fresh:
                 time.sleep(0.1)
                 # frame.update_frame(game_info_q.get())

@@ -130,6 +130,9 @@ def init_game():
 
     print("init_game()")
 
+    if game.game_over or not game.init:
+        game.n_init = 0
+
     state = game.state
     game.init_players_not_out()
     state.player_count = len(state.players_not_out)
@@ -140,6 +143,7 @@ def init_game():
     game.ready = True
     game.game_over = False
     game.init = True
+    game.n_init += 1
 
 
 while True:
