@@ -217,8 +217,8 @@ class PygamePage:
             game = self.game
 
             if game.game_over or not game.init or loop_count == 1:
-                print("Next game")
-                self.game = self.n.send("nextgame/")
+                print("Initialization")
+                self.game = self.n.send("init/")
                 game = self.game
                 self.init_game()
 
