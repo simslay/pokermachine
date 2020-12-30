@@ -220,6 +220,11 @@ class PygamePage:
                 print("Initialization")
                 self.init_game()
 
+            if game.next_game:
+                print("Initialization")
+                self.init_game()
+                self.n.send("nextgame/")
+
             player = game.get_player(self.player_name)
 
             if game.state.current_player == player:  # It's player's turn

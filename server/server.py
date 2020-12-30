@@ -52,6 +52,15 @@ def threaded_client(conn):
                         print("First act one")
                         game.act_one()
 
+                if data.startswith("nextgame/"):
+                    name = data.split("/")[1]
+                    player = game.get_player(name)
+                    game.players_ready.append(player)
+
+                if len(game.players_ready) == len(game.state.players_not_out):
+                    game.next_game = False
+                    game.players_ready = []
+
                 if data.startswith("action/"):
                     state = game.state
 
@@ -114,6 +123,7 @@ def threaded_client(conn):
                         game.init_game()
                         game.state.players = players
                         init_game()
+                        game.next_game = True
                         print("Next act one")
                         game.act_one()
 
