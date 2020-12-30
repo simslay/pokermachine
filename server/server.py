@@ -152,7 +152,6 @@ def init_game():
     game.init_current_player()
     print("Current player: " + str(state.current_player))
     game.ready = True
-    game.game_over = False
     game.init = True
 
 
