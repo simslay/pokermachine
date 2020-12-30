@@ -21,6 +21,8 @@ class Game(object):
         self.buy_in = starting_stake
         self.ready = False
         self.init = False
+        self.next_game = False
+        self.players_ready = []
 
     def init_game(self):
         self.game_over = False

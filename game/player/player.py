@@ -20,8 +20,7 @@ class Player(object):
         self.all_in = False
         self.action_done = False
         self.first_hand = True
-        # Current bet
-        self.bet = 0
+        self.bet = 0  # Current bet
 
     def __repr__(self):
         res = "Player[name=" + self.name + ", fold=" + str(self.fold) + "]"

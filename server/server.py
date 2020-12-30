@@ -43,7 +43,9 @@ def threaded_client(conn):
             else:
                 if data.startswith("name/"):
                     tab = data.split("/")
-                    game.state.players.append(Player(tab[1], 100, 1000))
+                    player = Player(tab[1], 100, 1000)
+                    game.state.players.append(player)
+                    game.players_ready.append(player)
 
                     if idCount == 2:
                         init_game()
