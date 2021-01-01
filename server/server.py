@@ -11,12 +11,14 @@ import pickle
 from game.game import Game
 from game.player.player import Player
 import traceback
+import threading
 
 server = "192.168.79.1"
 port = 5555
 idCount = 0
 game = None
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+lock = threading.Lock()
 
 try:
     s.bind((server, port))
@@ -117,6 +119,8 @@ def threaded_client(conn):
                         game.game_over = True
 
                     if game.game_over or not game.init:
+                        lock.acquire()
+
                         players = game.state.players
                         for player in players:
                             player.first_hand = False
@@ -126,6 +130,8 @@ def threaded_client(conn):
                         game.next_game = True
                         print("Next act one")
                         game.act_one()
+
+                        lock.release()
 
                 conn.sendall(pickle.dumps(game))
         except Exception as e:
@@ -141,6 +147,8 @@ def init_game():
 
     print("init_game()")
 
+    lock.acquire()
+
     if game.game_over or not game.init:
         game.n_init = 0
 
@@ -153,6 +161,8 @@ def init_game():
     print("Current player: " + str(state.current_player))
     game.ready = True
     game.init = True
+
+    lock.release()
 
 
 while True:
