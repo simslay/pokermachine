@@ -131,7 +131,7 @@ def threaded_client(conn):
                         print("Next act one")
                         game.act_one()
 
-                        lock.release()
+                        lock.release() # 
 
                 conn.sendall(pickle.dumps(game))
         except Exception as e:
