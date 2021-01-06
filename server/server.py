@@ -18,7 +18,7 @@ port = 5555
 idCount = 0
 game = None
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-lock = threading.Lock()
+lock = threading.RLock()
 
 try:
     s.bind((server, port))
@@ -119,19 +119,16 @@ def threaded_client(conn):
                         game.game_over = True
 
                     if game.game_over or not game.init:
-                        lock.acquire()
-
-                        players = game.state.players
-                        for player in players:
-                            player.first_hand = False
-                        game.init_game()
-                        game.state.players = players
-                        init_game()
-                        game.next_game = True
-                        print("Next act one")
-                        game.act_one()
-
-                        lock.release()
+                        with lock:
+                            players = game.state.players
+                            for player in players:
+                                player.first_hand = False
+                            game.init_game()
+                            game.state.players = players
+                            init_game()
+                            game.next_game = True
+                            print("Next act one")
+                            game.act_one()
 
                 conn.sendall(pickle.dumps(game))
         except Exception as e:
@@ -147,22 +144,19 @@ def init_game():
 
     print("init_game()")
 
-    lock.acquire()
+    with lock:
+        if game.game_over or not game.init:
+            game.n_init = 0
 
-    if game.game_over or not game.init:
-        game.n_init = 0
-
-    state = game.state
-    game.init_players_not_out()
-    state.player_count = len(state.players_not_out)
-    game.init_dealer()
-    print("Dealer: " + str(state.dealer))
-    game.init_current_player()
-    print("Current player: " + str(state.current_player))
-    game.ready = True
-    game.init = True
-
-    lock.release()
+        state = game.state
+        game.init_players_not_out()
+        state.player_count = len(state.players_not_out)
+        game.init_dealer()
+        print("Dealer: " + str(state.dealer))
+        game.init_current_player()
+        print("Current player: " + str(state.current_player))
+        game.ready = True
+        game.init = True
 
 
 while True:
