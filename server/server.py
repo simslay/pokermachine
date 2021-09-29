@@ -5,8 +5,6 @@ Created on Fri Dec 18 14:23:00 2020
 @author: simslay
 """
 
-# continue
-
 import socket
 from _thread import *
 import pickle
